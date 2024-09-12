@@ -29,4 +29,9 @@ class test_views(TestCase):
         response = self.client.get("/contact")
         self.assertEqual(response.status_code, 200)
 
+    def test_about_response(self):
+        """Check that teachers returns status code 200"""
+        response = self.client.get("/teachers")
+        self.assertEqual(response.status_code, 200)
+
    

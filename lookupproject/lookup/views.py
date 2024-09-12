@@ -7,7 +7,7 @@ def classes(request):
     return render(request, "lookup/classes.html")
 
 def teachers(request):
-    return render(request, "teachers.html")
+    return render(request, "lookup/teachers.html")
 
 def schools(request):
     return render(request, "lookup/schools.html")
