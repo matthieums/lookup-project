@@ -1,3 +1,11 @@
 from django.test import TestCase
 
-# Create your tests here.
+class test_views(TestCase):
+    def test_index(self):
+        """
+        Check if index returns status code 200
+        """
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+
+    
