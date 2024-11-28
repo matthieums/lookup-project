@@ -33,5 +33,3 @@ class test_views(TestCase):
         """Check that teachers returns status code 200"""
         response = self.client.get("/teachers")
         self.assertEqual(response.status_code, 200)
-
-   
