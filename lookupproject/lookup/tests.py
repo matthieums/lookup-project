@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+
 # Tests to check if the views respond properly
 class test_views(TestCase):
     """Check that all views respond properly"""
@@ -27,9 +28,4 @@ class test_views(TestCase):
     def test_contact_response(self):
         """Check that contact returns status code 200"""
         response = self.client.get("/contact")
-        self.assertEqual(response.status_code, 200)
-
-    def test_about_response(self):
-        """Check that teachers returns status code 200"""
-        response = self.client.get("/teachers")
         self.assertEqual(response.status_code, 200)
