@@ -15,9 +15,9 @@ class test_views(TestCase):
         response = self.client.get("/about")
         self.assertEqual(response.status_code, 200)
 
-    def test_classes_response(self):
-        """Check that classes returns status code 200"""
-        response = self.client.get("/classes")
+    def test_courses_response(self):
+        """Check that courses returns status code 200"""
+        response = self.client.get("/courses")
         self.assertEqual(response.status_code, 200)
 
     def test_schools_response(self):
