@@ -42,6 +42,22 @@ class School(models.Model):
         return self.name
 
 
+class Teacher(models.Model):
+    name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    schools = models.ManyToManyField(
+        School,
+        related_name='teachers',
+        verbose_name='school where this person teaches'
+        )
+    disciplines = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
+    mailaddress = models.EmailField(max_length=254, unique=True)
+    phone_number = models.CharField(max_length=15)
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.last_name}"
+
+
 class Course(models.Model):
     name = models.CharField(max_length=80)
     description = models.TextField(max_length=800)
@@ -62,29 +78,7 @@ class Course(models.Model):
         max_length=20
     )
     discipline = models.CharField(choices=DISCIPLINE_CHOICES)
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        verbose_name='school where the course takes place',
-        blank=True
-    )
     online = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name
-
-
-class Teacher(models.Model):
-    name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    schools = models.ManyToManyField(
-        School,
-        related_name='teachers',
-        verbose_name='school where this person teaches'
-        )
-    disciplines = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
-    mailaddress = models.EmailField(max_length=254, unique=True)
-    phone_number = models.CharField(max_length=15)
-
-    def __str__(self) -> str:
-        return f"{self.name} {self.last_name}"
