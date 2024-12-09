@@ -18,11 +18,11 @@ DISCIPLINE_CHOICES = {
 }
 
 # Multiple choices for target audiences
-ANYONE = 'anyone'
-ELDERLY = 'elderly'
-ADULTS = 'adults'
-ADOLESCENTS = 'adolescents'
-CHILDREN = 'children'
+ANYONE = 'Anyone'
+ELDERLY = 'Elderly'
+ADULTS = 'Adults'
+ADOLESCENTS = 'Adolescents'
+CHILDREN = 'Children'
 TARGET_AUDIENCE_CHOICES = {
     ANYONE: 'Anyone',
     ELDERLY: 'Elderly',
