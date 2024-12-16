@@ -17,7 +17,12 @@ def courses(request):
 
 
 def teachers(request):
-    return render(request, "lookup/teachers.html")
+    if request.method == 'GET':
+        teachers = Teacher.objects.all()
+
+        return render(request, "lookup/teachers.html", {
+            'teachers': teachers
+        })
 
 
 def schools(request):
