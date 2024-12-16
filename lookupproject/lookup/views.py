@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,13 +7,19 @@ import json
 from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .forms import CourseForm
+
 
 def index(request):
     return render(request, "lookup/index.html")
 
 
 def courses(request):
-    return render(request, "lookup/courses.html")
+    if request.method == 'GET':
+        courses = Course.objects.all()
+        return render(request, "lookup/courses.html", {
+            'courses': courses
+        })
 
 
 def teachers(request):
@@ -26,11 +32,25 @@ def teachers(request):
 
 
 def schools(request):
-    return render(request, "lookup/schools.html")
+    if request.method == 'GET':
+        schools = School.objects.all()
+        return render(request, "lookup/schools.html", {
+            'schools': schools
+        })
 
 
 def contact(request):
-    return render(request, "lookup/contact.html")
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect
+    else:
+        form = CourseForm()
+
+    return render(request, "lookup/contact.html", {
+        'form': form
+    })
 
 
 def about(request):
