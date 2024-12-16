@@ -6,4 +6,7 @@ Schools
 
 {% block body %}
     <h2>Schools</h2>
+    {% for school in schools %}
+        <h3>{{school.name}}</h3>
+    {% endfor %}
 {% endblock %}
