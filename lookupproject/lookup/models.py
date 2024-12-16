@@ -1,10 +1,9 @@
-
-################# TO DO ###############
 # TO-DO : Add validators for emails, urls, etc.
 # TO-DO : Add the possibility to add a picture => Will need the Pillow
 # library and an imageField.
 # TO-DO: import library to check phone numbers
-
+# If a class is online, what do I do with addresses etc?
+from django.core import serializers
 from django.db import models
 
 # Multiple choices for the discipline
@@ -54,6 +53,9 @@ class Teacher(models.Model):
     mailaddress = models.EmailField(max_length=254, unique=True)
     phone_number = models.CharField(max_length=15)
 
+    def serialize(self):
+        return serializers.serialize('json', [self])
+    
     def __str__(self) -> str:
         return f"{self.name} {self.last_name}"
 
@@ -67,7 +69,7 @@ class Course(models.Model):
         related_name='courses',
         verbose_name='where the course takes place'
         )
-    teachers = models.ManyToManyField('Teacher', related_name='courses')
+    teachers = models.ManyToManyField(Teacher, related_name='courses')
     schedule = models.DateTimeField(
         auto_now=False,
         auto_now_add=False
