@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
@@ -9,4 +8,9 @@ urlpatterns = [
     path("teachers", views.teachers, name="teachers"),
     path("schools", views.schools, name="schools"),
     path("contact", views.contact, name="contact"),
+
+    # API endpoints
+    path("teachers/<int:teacher_id>", views.getTeacher, name="getTeacher"),
+    path("courses/<int:course_id>", views.getCourse, name="getCourse"),
+    path("schools/<int:school_id>", views.getSchool, name="getSchool")
 ]
