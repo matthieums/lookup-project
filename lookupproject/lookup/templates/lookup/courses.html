@@ -5,5 +5,14 @@ Courses
 {% endblock %}
 
 {% block body %}
-<h2>Courses</h2>
+
+    <h2>Courses</h2>
+    {% for course in courses %}
+        <h2>{{course.name}}</h2>
+        <p><strong>{{course.description}}</strong></p>
+        {% for teacher in course.teachers.all %}
+            <p>{{teacher.name}}</p>
+        {% endfor %}
+    {% endfor %}
+
 {% endblock %}
