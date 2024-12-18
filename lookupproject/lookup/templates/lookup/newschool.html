@@ -1,0 +1,18 @@
+{% extends 'lookup/layout.html' %}
+
+{% block title %}
+New school
+{% endblock %}
+
+{% block body %}
+<h2>Submit a new school</h2>
+
+<div>
+    <form action="/newschool" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="OK">
+    </form>
+</div>
+
+{% endblock %}

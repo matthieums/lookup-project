@@ -7,7 +7,7 @@ import json
 from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm
+from .forms import CourseForm, SchoolForm
 
 
 def index(request):
@@ -55,6 +55,19 @@ def contact(request):
 
 def about(request):
     return render(request, "lookup/about.html")
+
+
+def new_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect
+    else:
+        form = SchoolForm()
+    return render(request, "lookup/newschool.html", {
+        'form': form
+    })
 
 
 @api_view(['GET'])

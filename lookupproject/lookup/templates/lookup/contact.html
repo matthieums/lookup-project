@@ -9,6 +9,9 @@ Contact
 
     <h2>Submit a course</h2>
 <form action="/contact" method="post">
+    <a href="/newschool">Your school does not exist in our database yet?
+        Add it here !
+    </a>
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="OK">

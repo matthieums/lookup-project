@@ -8,6 +8,8 @@ urlpatterns = [
     path("teachers", views.teachers, name="teachers"),
     path("schools", views.schools, name="schools"),
     path("contact", views.contact, name="contact"),
+    path("newschool", views.new_school, name="new_school"),
+
 
     # API endpoints
     path("teachers/<int:teacher_id>", views.getTeacher, name="getTeacher"),
