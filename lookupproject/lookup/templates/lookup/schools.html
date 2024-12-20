@@ -7,6 +7,8 @@ Schools
 {% block body %}
     <h2>Schools</h2>
     {% for school in schools %}
-        <h3>{{school.name}}</h3>
+        <a href="{% url 'school_profile' school.id %}">
+            <h3>{{school.name}}</h3>
+        </a>
     {% endfor %}
 {% endblock %}
