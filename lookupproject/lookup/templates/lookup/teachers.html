@@ -7,7 +7,9 @@ Teachers
 {% block body %}
     <h2>Teachers</h2>
     {% for teacher in teachers %}
-        <h3>{{ teacher.name }}</h3>
+        <a href="">
+            <h3 id="{{ teacher.id }}">{{ teacher.name }}</h3>
+        </a>
         {% for course in teacher.courses.all %}
             <p>{{ course.name }}</p>
         {% endfor %}

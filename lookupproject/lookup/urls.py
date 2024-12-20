@@ -9,10 +9,18 @@ urlpatterns = [
     path("schools", views.schools, name="schools"),
     path("contact", views.contact, name="contact"),
     path("newschool", views.new_school, name="new_school"),
+    path("teachers/<int:teacher_id>",
+         views.teacher_profile,
+         name="teacher_profile"
+         ),
+    path("schools/<int:school_id>",
+         views.school_profile,
+         name="school_profile"
+         ),
 
 
     # API endpoints
-    path("teachers/<int:teacher_id>", views.getTeacher, name="getTeacher"),
-    path("courses/<int:course_id>", views.getCourse, name="getCourse"),
-    path("schools/<int:school_id>", views.getSchool, name="getSchool")
+    path("teachers/get/<int:teacher_id>", views.getTeacher, name="getTeacher"),
+    path("courses/get/<int:course_id>", views.getCourse, name="getCourse"),
+    path("schools/get/<int:school_id>", views.getSchool, name="getSchool")
 ]

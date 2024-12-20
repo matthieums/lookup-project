@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -67,6 +67,20 @@ def new_school(request):
         form = SchoolForm()
     return render(request, "lookup/newschool.html", {
         'form': form
+    })
+
+
+def teacher_profile(request, teacher_id):
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    return render(request, "lookup/teacher_profile.html", {
+        'teacher': teacher
+    })
+
+
+def school_profile(request, school_id):
+    school = get_object_or_404(School, pk=school_id)
+    return render(request, "lookup/school_profile.html", {
+        'school': school
     })
 
 
