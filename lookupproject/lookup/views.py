@@ -99,16 +99,15 @@ def getTeacher(request, teacher_id):
 
 
 @api_view(['GET'])
-def getCourse(request, course_id):
-    try:
-        course = Course.objects.get(pk=course_id)
-    except Course.DoesNotExist:
+def getCourse(request, course_discipline):
+    course = Course.objects.filter(discipline=course_discipline.lower())
+    if not course.exists():
         return JsonResponse({
-            "error": f"Course with id {course_id} does not exist"
+            "error": f"Course with id {course_discipline} does not exist"
         })
 
     if request.method == 'GET':
-        serializer = CourseSerializer(course)
+        serializer = CourseSerializer(course, many=True)
         return Response(serializer.data)
 
 
