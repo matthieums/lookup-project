@@ -1,23 +1,24 @@
 from faker import Faker
-from faker.providers import BaseProvider
+from faker.providers import BaseProvider, DynamicProvider
 import factory
 from lookup.models import Course, Teacher, School
 from lookup.models import DISCIPLINE_CHOICES, TARGET_AUDIENCE_CHOICES
 import random
+from django.utils import timezone
 
 
 fake = Faker()
 
+styles = {
+    'dance': ['Salsa', 'Tango', 'Bachata', 'Jive', 'Rock'],
+    'drama': ['Improv', 'Declamation', 'Eloquence'],
+    'music': ['Piano', 'violin', 'Singing', 'Cello']
+}
 
-class Styles(BaseProvider):
-    def randomStyle(self) -> str:
-        styles = {
-            'dance': ['Salsa', 'Tango', 'Bachata', 'Jive', 'Rock'],
-            'drama': ['Improv', 'Declamation', 'Eloquence'],
-            'music': ['Piano', 'violin', 'Singing', 'Cello']
-        }
-        random_list = random.choice(list(styles.values()))
-        return random.choices(random_list)
+random_style_provider = DynamicProvider(
+    provider_name='style',
+    elements=[random.choice(random.choice(list(styles.values())))],
+)
 
 
 class Audiences(BaseProvider):
@@ -30,7 +31,7 @@ class Disciplines(BaseProvider):
         return random.choice(list(DISCIPLINE_CHOICES.values()))
 
 
-fake.add_provider(Styles)
+fake.add_provider(random_style_provider)
 fake.add_provider(Audiences)
 fake.add_provider(Disciplines)
 
@@ -38,6 +39,7 @@ fake.add_provider(Disciplines)
 class SchoolFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = School
+
     name = factory.Faker('company')
     location = factory.Faker('address')
     contact = factory.Faker('email')
@@ -47,6 +49,7 @@ class SchoolFactory(factory.django.DjangoModelFactory):
 class TeacherFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Teacher
+
     name = factory.Faker('name')
     last_name = factory.Faker('last_name')
     disciplines = fake.randomDiscipline()
@@ -57,9 +60,11 @@ class TeacherFactory(factory.django.DjangoModelFactory):
 class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Course
-    name = fake.randomStyle()
+
+    name = fake.style()
+    print(f'generated name:{name}')
     description = factory.Faker('text')
-    schedule = factory.Faker('date_time')
+    schedule = timezone.make_aware(fake.date_time_this_year())
     target_audience = fake.randomAudience()
-    discipline = random.choice(['music', 'dance', 'drama'])
+    discipline = fake.randomDiscipline()
     online = False
