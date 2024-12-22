@@ -87,6 +87,13 @@ def success(request):
     return render(request, 'lookup/success.html')
 
 
+def enroll(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+
+    return render(request, 'lookup/course.html', {
+        'course': course
+    })
+
 @api_view(['GET'])
 def getTeacher(request, teacher_id):
     try:

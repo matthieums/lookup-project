@@ -18,7 +18,7 @@ urlpatterns = [
          name="school_profile"
          ),
     path("success", views.success, name="success"),
-
+    path("enroll/<int:course_id>", views.enroll, name="enroll"),
 
     # API endpoints
     path("teachers/get/<int:teacher_id>", views.getTeacher, name="getTeacher"),

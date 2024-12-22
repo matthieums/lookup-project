@@ -8,7 +8,9 @@ Courses
 
     <h2>Courses</h2>
     {% for course in courses %}
-        <h2>{{course.name}}</h2>
+        <a href="{% url 'enroll' course.id %}">
+            <h2>{{course.name}}</h2>
+        </a>
         <p><strong>{{course.description}}</strong></p>
         {% for teacher in course.teachers.all %}
             <p>{{teacher.name}}</p>

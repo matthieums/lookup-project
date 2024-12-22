@@ -1,0 +1,14 @@
+{% extends 'lookup/layout.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2>{{ course.name}}</h2>
+    <p>{{ course.description }}</p>
+    <a href="{% url 'enroll'  course.id %}">I want to enroll to this course</a>
+</div>
+
+{% endblock %}
