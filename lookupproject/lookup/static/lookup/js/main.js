@@ -57,10 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
         resultsContainer.appendChild(searchBar);
 
         data.forEach((course) => {
-            const newElement = document.createElement('p')
+            const newParent = document.createElement('div')
+            const newElement = document.createElement('a')
+            newElement.href = `enroll/${course.id}`
             newElement.classList.add('result')
-            newElement.innerHTML = course.name
-            resultsContainer.append(newElement)
+            newElement.textContent = course.name
+            newParent.appendChild(newElement)
+            resultsContainer.append(newParent)
         })
     }
 
