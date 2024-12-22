@@ -6,7 +6,7 @@ import json
 from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm, SchoolForm
+from .forms import CourseForm, SchoolForm, enrollForm
 
 
 def index(request):
@@ -89,9 +89,11 @@ def success(request):
 
 def enroll(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    form = enrollForm()
 
     return render(request, 'lookup/course.html', {
-        'course': course
+        'course': course,
+        'form': form
     })
 
 @api_view(['GET'])

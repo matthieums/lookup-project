@@ -24,3 +24,9 @@ class SchoolForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['autocomplete'] = 'off'
+
+
+class enrollForm(forms.Form):
+    first_name = forms.CharField(max_length=52)
+    last_name = forms.CharField(max_length=52)
+    email = forms.EmailField()
