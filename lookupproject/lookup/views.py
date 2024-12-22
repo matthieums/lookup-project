@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.urls import reverse
 from lookup.models import Course, Teacher, School
 import json
@@ -44,7 +43,7 @@ def contact(request):
         form = CourseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect
+            return HttpResponseRedirect("success")
     else:
         form = CourseForm()
 
@@ -82,6 +81,10 @@ def school_profile(request, school_id):
     return render(request, "lookup/school_profile.html", {
         'school': school
     })
+
+
+def success(request):
+    return render(request, 'lookup/success.html')
 
 
 @api_view(['GET'])

@@ -17,6 +17,7 @@ urlpatterns = [
          views.school_profile,
          name="school_profile"
          ),
+    path("success", views.success, name="success"),
 
 
     # API endpoints
