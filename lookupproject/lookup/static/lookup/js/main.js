@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach((course) => {
             const newElement = document.createElement('p')
+            newElement.classList.add('result')
             newElement.innerHTML = course.name
             resultsContainer.append(newElement)
         })
@@ -75,7 +76,24 @@ document.addEventListener('DOMContentLoaded', function () {
         searchBar.type = 'text'
         searchBar.placeholder = 'Search here'
         searchBar.classList.add('search-bar')
+
+        searchBar.addEventListener('keyup', function(event) {
+            searchQuery = event.target.value
+                narrowResults(searchQuery)
+        })
         return searchBar;
+    }
+
+    function narrowResults(searchQuery) {
+        const allResults = document.querySelectorAll('.result')
+        allResults.forEach(result => {
+            const name = result.textContent
+            if (!name.toLowerCase().startsWith(searchQuery.toLowerCase())) {
+                result.classList.add('d-none')
+            } else {
+                result.classList.remove('d-none')
+            }
+        })
     }
 
 
