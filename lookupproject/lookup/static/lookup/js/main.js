@@ -23,6 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
     } else if (path === '/teachers') {
+        
+        // TODO: Adapt the API and templates to behave like the index
+        // in terms of search and results.
+        // My code should be reusable to the point that I just have one
+        // function to add that would trigger a cascade and make it all work.
+
+        searchBar = searchBarFactory()
+
         console.log('Welcome to the teachers page')
 
     } else if (path === '/courses') {
@@ -65,12 +73,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach((course) => {
             const newParent = document.createElement('div')
-            const newElement = document.createElement('a')
-            newElement.href = `enroll/${course.id}`
-            newElement.classList.add('result')
-            newElement.textContent = course.name
+    
+            header = course.name
+            title = course.teacher
+            text = course.description
+            footer = course.target_audience
+
+            const newElement = courseCardFactory(header, title, text, footer)
+
             newParent.appendChild(newElement)
             resultsContainer.append(newParent)
+
         })
     }
 
@@ -98,10 +111,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const allResults = document.querySelectorAll('.result')
         allResults.forEach(result => {
             const name = result.textContent
+            console.log(name)
             if (!name.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-                result.classList.add('d-none')
+                result.parentElement.classList.add('d-none')
             } else {
-                result.classList.remove('d-none')
+                result.parentElement.classList.remove('d-none')
             }
         })
     }
@@ -122,6 +136,38 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         .catch(error => console.log('error', error));
+    }
+
+
+    // Allows for the creation of cards with appropriate data.
+    // I put the result class in the header, because the header
+    // is the target for the search bar.
+    function courseCardFactory(header, title, text, footer) {
+        const card = document.createElement('div');
+        card.classList.add('card', 'text-center', 'm-4');
+
+        const cardHeader = document.createElement('div');
+        cardHeader.classList.add('card-header', 'result');
+        cardHeader.textContent = header;
+
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+
+        const cardTitle = document.createElement('h5');
+        cardTitle.classList.add('card-title');
+        cardTitle.textContent = title;
+
+        const cardText = document.createElement('card-text');
+        cardText.classList.add('card-text');
+        cardText.textContent = text;
+
+        const cardFooter = document.createElement('div');
+        cardFooter.classList.add('card-footer', 'text-body-secondary');
+        cardFooter.textContent = footer
+
+        card.append(cardHeader, cardBody, cardTitle, cardText, cardFooter);
+
+        return card
     }
 
 });
