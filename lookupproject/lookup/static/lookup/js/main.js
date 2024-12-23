@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
 
+    } else if (path === '/newschool') {
+        const addressInput = document.getElementById('id_location');
+        addressInput.addEventListener('keyup', function(event) {
+            let addressToSearch = event.target.value;
+            checkAddress(addressToSearch);
+        })
+
     } else if (path === '/teachers') {
         console.log('Welcome to the teachers page')
 
@@ -99,5 +106,22 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 
+    // Geoapify's address checker
+    // https://www.geoapify.com/address-autocomplete/
+    function checkAddress(address) {
+        const ApiKey = '931a2f65384241b19147a6b601733f10'
+        const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(address)}&apiKey=${ApiKey}`;
+
+        fetch(url).then(response => response.json())
+        .then(result => {
+            if (result.features.length === 0) {
+                console.log("The address is not found");
+            } else {
+                console.log("Matched address:")
+                console.log(result.features[0]);
+            }
+        })
+        .catch(error => console.log('error', error));
+    }
 
 });
