@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.urls import reverse
 from lookup.models import Course, Teacher, School
 import json
@@ -96,17 +96,15 @@ def enroll(request, course_id):
         'form': form
     })
 
+
 @api_view(['GET'])
-def getTeacher(request, teacher_id):
-    try:
-        teacher = Teacher.objects.get(pk=teacher_id)
-    except Teacher.DoesNotExist:
-        return JsonResponse({
-            "error": f"Teacher with id {teacher_id} does not exist"
-        })
+def getTeacher(request):
+    teachers = Teacher.objects.all()
+    if not teachers.exists():
+        raise Http404("No teachers found.")
 
     if request.method == 'GET':
-        serializer = TeacherSerializer(teacher)
+        serializer = TeacherSerializer(teachers, many=True)
         return Response(serializer.data)
 
 
@@ -124,14 +122,11 @@ def getCourse(request, course_discipline):
 
 
 @api_view(['GET'])
-def getSchool(request, school_id):
-    try:
-        school = School.objects.get(pk=school_id)
-    except School.DoesNotExist:
-        return JsonResponse({
-            "error": f"School with id {school_id} does not exist"
-        })
+def getSchool(request):
+    schools = School.objects.all()
+    if not schools.exists():
+        raise Http404("No school found")
 
     if request.method == 'GET':
-        serializer = SchoolSerializer(school)
+        serializer = SchoolSerializer(schools, many=True)
         return Response(serializer.data)

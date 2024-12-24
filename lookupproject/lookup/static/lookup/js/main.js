@@ -3,6 +3,7 @@ var path = window.location.pathname;
 const indexView = '/'
 const teachersView = '/teachers'
 const newSchoolView ='/newschool'
+const schoolsView = '/schools'
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const fetchUrl = `courses/get/${categoryName}`
             category.addEventListener('click', (event) => {
                 event.preventDefault();
-                fetchData(fetchUrl)
+                fetchAndRender(fetchUrl)
             })
         })
 
@@ -33,13 +34,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     } else if (path === teachersView) {
         const fetchUrl = ('/teachers/get')
-        fetchData(fetchUrl)
+        fetchAndRender(fetchUrl)
         
+    } else if (path === schoolsView) {
+        const fetchUrl = ('schools/get')
+        fetchAndRender(fetchUrl)
     }
 
 
     // Fetch data and call function to display data
-    function fetchData(url) {
+    function fetchAndRender(url) {
         fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -71,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (path === indexView) {
             formatResultsAsCards(data)
         } else if (path === teachersView) {
+            formatResultsAsStrings(data)
+        } else if (path === schoolsView) {
             formatResultsAsStrings(data)
         }
         
