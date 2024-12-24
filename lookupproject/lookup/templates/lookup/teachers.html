@@ -6,12 +6,13 @@ Teachers
 
 {% block body %}
     <h2>Teachers</h2>
-    {% for teacher in teachers %}
-        <a href="{% url 'teacher_profile' teacher.id %}">
-            <h3>{{ teacher.name }}</h3>
-        </a>
-        {% for course in teacher.courses.all %}
-            <p>{{ course.name }}</p>
-        {% endfor %}
-    {% endfor %}
+    <div class="container results-container">
+    </div>
+    <div class="container teacher-container">
+
+    </div>
+
+
+        
+    
 {% endblock %}

@@ -1,51 +1,46 @@
-document.addEventListener('DOMContentLoaded', function () {
-    var path = window.location.pathname;
+// Globals
+var path = window.location.pathname;
+const indexView = '/'
+const teachersView = '/teachers'
+const newSchoolView ='/newschool'
 
-    if (path === '/') {
+document.addEventListener('DOMContentLoaded', function () {
+
+
+
+    if (path === indexView) {
 
         // Manage buttons to display appropriate results on index page 
         const categories = Array.from(document.querySelectorAll('.category'))
 
         categories.forEach(category => {
-            const categoryName = category.innerHTML
+            const categoryName = category.textContent
+            const fetchUrl = `courses/get/${categoryName}`
             category.addEventListener('click', (event) => {
                 event.preventDefault();
-                fetchCourseData(categoryName)
+                fetchData(fetchUrl)
             })
         })
 
 
-    } else if (path === '/newschool') {
+    } else if (path === newSchoolView) {
         const addressInput = document.getElementById('id_location');
+
         addressInput.addEventListener('keyup', function(event) {
             let addressToSearch = event.target.value;
             checkAddress(addressToSearch);
         })
 
-    } else if (path === '/teachers') {
-        
-        // TODO: Adapt the API and templates to behave like the index
-        // in terms of search and results.
-        // My code should be reusable to the point that I just have one
-        // function to add that would trigger a cascade and make it all work.
-
-        searchBar = searchBarFactory()
-
-        console.log('Welcome to the teachers page')
-
-    } else if (path === '/courses') {
-        console.log('Welcome to the courses page')
-    
-    } else if (path === '/schools') {
-        console.log('Welcome to the schools page')
-    } else if (path === '/newschool') {
+    } else if (path === teachersView) {
+        const fetchUrl = ('/teachers/get')
+        fetchData(fetchUrl)
         
     }
 
 
     // Fetch data and call function to display data
-    function fetchCourseData(categoryName) {
-        fetch(`courses/get/${categoryName}`)
+    function fetchData(url) {
+        fetch(url)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error')
@@ -60,30 +55,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Renders data and adds a search bar
     function renderResults(data) {
-        const submitCourseContainer = document.querySelector('.submit-course-container');
-        const categoriesContainer = document.querySelector('.categories-container');
-        const containersToHide = [categoriesContainer, submitCourseContainer];
+        let containersToHide = [];
+        
+        if (path === indexView) {
+            const submitCourseContainer = document.querySelector('.submit-course-container');
+            const categoriesContainer = document.querySelector('.categories-container');    
+            containersToHide.push(categoriesContainer, submitCourseContainer);
+        } else if (path === teachersView) {
+            const teacherContainer = document.querySelector('.teacher-container')
+            containersToHide.push(teacherContainer)
+        }
+
         hideUnnecessaryContainers(containersToHide)
 
+        if (path === indexView) {
+            formatResultsAsCards(data)
+        } else if (path === teachersView) {
+            formatResultsAsStrings(data)
+        }
+        
         const resultsContainer = document.querySelector('.results-container')
+        const searchBar = searchBarFactory()
+        resultsContainer.prepend(searchBar);
+    }
+
+    function formatResultsAsStrings(data) {
+        const resultsContainer = document.querySelector('.results-container');
+        resultsContainer.innerHTML = '';
+        
+        data.forEach((object) => {
+            const container = document.createElement('div');
+            container.classList.add('result')
+            const header = object.name;
+            container.append(header)
+            resultsContainer.append(container)
+        })
+    }
+
+    function formatResultsAsCards(data) {
+        const resultsContainer = document.querySelector('.results-container');
         resultsContainer.innerHTML = '';
 
-        const searchBar = searchBarFactory()
-        resultsContainer.appendChild(searchBar);
-
-        data.forEach((course) => {
-            const newParent = document.createElement('div')
+        data.forEach((object) => {
+            const card = document.createElement('div');
     
-            header = course.name
-            title = course.teacher
-            text = course.description
-            footer = course.target_audience
+            const header = object.name;
+            const title = object.teacher;
+            const text = object.description;
+            const footer = object.target_audience;
 
-            const newElement = courseCardFactory(header, title, text, footer)
-
-            newParent.appendChild(newElement)
-            resultsContainer.append(newParent)
-
+            const cardBody = courseCardFactory(header, title, text, footer);
+            card.appendChild(cardBody);
+            resultsContainer.append(cardBody);
         })
     }
 
@@ -109,16 +132,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function narrowResults(searchQuery) {
         const allResults = document.querySelectorAll('.result')
+        const normalizedQuery = searchQuery.toLowerCase()
+
         allResults.forEach(result => {
-            const name = result.textContent
-            console.log(name)
-            if (!name.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-                result.parentElement.classList.add('d-none')
+            let resultData;
+
+            if (result.classList.contains('card')) {
+                resultData = result.firstElementChild.textContent
+            } else {           
+                resultData = result.textContent
+            }
+
+            if (!resultData.toLowerCase().startsWith(normalizedQuery)) {
+                result.classList.add('d-none')
             } else {
-                result.parentElement.classList.remove('d-none')
+                result.classList.remove('d-none')
             }
         })
     }
+
+    
 
     // Geoapify's address checker
     // https://www.geoapify.com/address-autocomplete/
@@ -140,14 +173,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // Allows for the creation of cards with appropriate data.
-    // I put the result class in the header, because the header
-    // is the target for the search bar.
+    // I add the result class so it can be manipulated dynamically
     function courseCardFactory(header, title, text, footer) {
         const card = document.createElement('div');
-        card.classList.add('card', 'text-center', 'm-4');
+        card.classList.add('card', 'text-center', 'm-4', 'result');
 
         const cardHeader = document.createElement('div');
-        cardHeader.classList.add('card-header', 'result');
+        cardHeader.classList.add('card-header');
         cardHeader.textContent = header;
 
         const cardBody = document.createElement('div');
