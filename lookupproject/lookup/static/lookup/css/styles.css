@@ -17,3 +17,6 @@ input, select, textarea {
     margin-bottom: 10px;
 }
 
+.autocomplete-container {
+    position: relative;
+}

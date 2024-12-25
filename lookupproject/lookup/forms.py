@@ -19,6 +19,9 @@ class SchoolForm(forms.ModelForm):
     class Meta:
         model = School
         fields = ['name', 'location', 'contact', 'website']
+        widgets = {
+            'location': forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

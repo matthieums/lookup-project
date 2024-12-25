@@ -1,13 +1,16 @@
+
 // Globals
 var path = window.location.pathname;
 const indexView = '/'
 const teachersView = '/teachers'
 const newSchoolView ='/newschool'
 const schoolsView = '/schools'
+const contactView = '/contact'
+// If I change the API key, make sure I change it in the validators.py file too
+const ApiKey = '931a2f65384241b19147a6b601733f10'
+
 
 document.addEventListener('DOMContentLoaded', function () {
-
-
 
     if (path === indexView) {
 
@@ -23,14 +26,28 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         })
 
-
     } else if (path === newSchoolView) {
-        const addressInput = document.getElementById('id_location');
+        const autoCompleteContainer = document.getElementById("autocomplete");
+        const locationInput = document.getElementById("id_location");
+        
+        const autoCompleteInput = new autocomplete.GeocoderAutocomplete(
+            autoCompleteContainer, 
+            ApiKey, 
+            { /* Geocoder options */ });
 
-        addressInput.addEventListener('keyup', function(event) {
-            let addressToSearch = event.target.value;
-            checkAddress(addressToSearch);
-        })
+            autoCompleteInput.on('select', (location) => {
+                if (location.properties) {
+                    const address = location.properties.formatted;
+                    console.log(address)
+                    locationInput.value = address;
+                }
+            });
+        
+            autoCompleteInput.on('input', (text) => {
+                locationInput.value = text;
+            });
+
+
 
     } else if (path === teachersView) {
         const fetchUrl = ('/teachers/get')
@@ -39,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (path === schoolsView) {
         const fetchUrl = ('schools/get')
         fetchAndRender(fetchUrl)
-    }
+    } 
 
 
     // Fetch data and call function to display data
@@ -156,27 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
     }
-
-    
-
-    // Geoapify's address checker
-    // https://www.geoapify.com/address-autocomplete/
-    function checkAddress(address) {
-        const ApiKey = '931a2f65384241b19147a6b601733f10'
-        const url = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(address)}&apiKey=${ApiKey}`;
-
-        fetch(url).then(response => response.json())
-        .then(result => {
-            if (result.features.length === 0) {
-                console.log("The address is not found");
-            } else {
-                console.log("Matched address:")
-                console.log(result.features[0]);
-            }
-        })
-        .catch(error => console.log('error', error));
-    }
-
 
     // Allows for the creation of cards with appropriate data.
     // I add the result class so it can be manipulated dynamically

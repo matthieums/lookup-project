@@ -61,9 +61,10 @@ def new_school(request):
         form = SchoolForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect
+            return redirect('success')
     else:
         form = SchoolForm()
+
     return render(request, "lookup/newschool.html", {
         'form': form
     })
