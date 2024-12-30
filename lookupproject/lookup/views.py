@@ -57,6 +57,7 @@ def about(request):
 
 
 def new_school(request):
+    print('view called')
     if request.method == 'POST':
         form = SchoolForm(request.POST)
         if form.is_valid():

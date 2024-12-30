@@ -11,6 +11,13 @@ const ApiKey = '931a2f65384241b19147a6b601733f10'
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    getUserCoordinates()
+        .then((coords) => {
+            console.log('User Coordinates:', coords)
+        })
+        .catch((error) => {
+            console.error(error);
+        })
 
     if (path === indexView) {
 
@@ -29,23 +36,25 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (path === newSchoolView) {
         const autoCompleteContainer = document.getElementById("autocomplete");
         const locationInput = document.getElementById("id_location");
-        
+        const latitudeInput = document.getElementById("id_latitude");
+        const longitudeInput = document.getElementById("id_longitude");
+
         const autoCompleteInput = new autocomplete.GeocoderAutocomplete(
             autoCompleteContainer, 
             ApiKey, 
             { /* Geocoder options */ });
-
             autoCompleteInput.on('select', (location) => {
                 if (location.properties) {
+                    console.log(location)
                     const address = location.properties.formatted;
-                    console.log(address)
+                    const latitude = parseFloat(location.properties.lat).toFixed(6);
+                    const longitude = parseFloat(location.properties.lon).toFixed(6);
                     locationInput.value = address;
-                }
+                    latitudeInput.value = latitude;
+                    longitudeInput.value = longitude;
+                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);                }
             });
         
-            autoCompleteInput.on('input', (text) => {
-                locationInput.value = text;
-            });
 
 
 
@@ -204,4 +213,20 @@ document.addEventListener('DOMContentLoaded', function () {
         return card
     }
 
+    function getUserCoordinates() {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        resolve [position.coords.latitude, position.coords.longitude];
+                    },
+                    (error) => {
+                        reject('Error getting location' + error.message);
+                    }
+                );
+            } else {
+                reject('Geolocation is not supported by this browser');
+            }
+        });
+    }
 });

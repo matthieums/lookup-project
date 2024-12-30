@@ -18,9 +18,12 @@ class CourseForm(forms.ModelForm):
 class SchoolForm(forms.ModelForm):
     class Meta:
         model = School
-        fields = ['name', 'location', 'contact', 'website']
+        fields = ['name', 'location', 'latitude',
+                  'longitude', 'contact', 'website']
         widgets = {
-            'location': forms.HiddenInput
+            'location': forms.HiddenInput,
+            'longitude': forms.HiddenInput,
+            'latitude': forms.HiddenInput
         }
 
     def __init__(self, *args, **kwargs):

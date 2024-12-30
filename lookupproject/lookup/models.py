@@ -5,6 +5,7 @@
 # If a class is online, what do I do with addresses etc?
 from django.core import serializers
 from django.db import models
+from lookup.validators import validate_location
 
 # Multiple choices for the discipline
 MUSIC = 'music'
@@ -33,7 +34,9 @@ TARGET_AUDIENCE_CHOICES = {
 
 class School(models.Model):
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, validators=[validate_location])
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
     contact = models.EmailField(max_length=254, unique=True)
     website = models.URLField(max_length=200, blank=True)
 
