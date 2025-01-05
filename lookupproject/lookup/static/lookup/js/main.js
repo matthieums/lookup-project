@@ -6,20 +6,64 @@ const teachersView = '/teachers'
 const newSchoolView ='/newschool'
 const schoolsView = '/schools'
 const contactView = '/contact'
+const locationBasedBrowser = '/geoschool'
 // If I change the API key, make sure I change it in the validators.py file too
 const ApiKey = '931a2f65384241b19147a6b601733f10'
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    getUserCoordinates()
-        .then((coords) => {
-            console.log('User Coordinates:', coords)
-        })
-        .catch((error) => {
-            console.error(error);
-        })
+//     getUserCoordinates()
+//         .then((coords) => {
+//             console.log('User Coordinates:', coords)
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         })
 
     if (path === indexView) {
+        document.querySelector('.nearby-schools-container').innerHTML = '<p>Loading...</p>';
+
+        // Development data
+        const userCoordinates = [50.8503, 4.3517];
+        const radius_in_meters = 10000000000000000000
+
+        fetch('/geoschool', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ 
+                user_lat: userCoordinates[0],
+                user_lon: userCoordinates[1],
+                radius: radius_in_meters
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('NETWORK RESPONSE WAS NOT OK')
+            }
+            return response.json();
+        })
+        .then(data => {
+            const nearbySchoolsContainer = document.querySelector('.nearby-schools-container');
+            nearbySchoolsContainer.innerHTML = '';
+
+            if (data.error) {
+                nearbySchoolsContainer.innerHTML = `${data.error}`;
+            } else {
+                data.forEach(school => {
+                    nearbySchoolsContainer.innerHTML += school.name;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.querySelector('.nearby-schools-container').innerHTML = 'AN ERROR HAS OCCURED';
+        });
+
+
+
+
 
         // Manage buttons to display appropriate results on index page 
         const categories = Array.from(document.querySelectorAll('.category'))
@@ -47,12 +91,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (location.properties) {
                     console.log(location)
                     const address = location.properties.formatted;
-                    const latitude = parseFloat(location.properties.lat).toFixed(6);
-                    const longitude = parseFloat(location.properties.lon).toFixed(6);
+                    const coordinates = parseFloat(location.properties);
                     locationInput.value = address;
                     latitudeInput.value = latitude;
                     longitudeInput.value = longitude;
-                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);                }
+                    console.log(`${coordinates}`);                }
             });
         
 
@@ -228,5 +271,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 reject('Geolocation is not supported by this browser');
             }
         });
+    }
+
+    // Function to get CSRF token (required for Django's CSRF protection)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 });

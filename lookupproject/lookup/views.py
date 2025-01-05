@@ -132,3 +132,33 @@ def getSchool(request):
     if request.method == 'GET':
         serializer = SchoolSerializer(schools, many=True)
         return Response(serializer.data)
+
+
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
+from .serializers import SchoolSerializer
+
+# Later down the road, consider using django signals
+# To get and validate geographic coordinates
+@api_view(['POST'])
+def get_nearby_locations(request):
+    try:
+        user_lat = float(request.data.get('user_lat'))
+        user_lon = float(request.data.get('user_lon'))
+        radius = float(request.data.get('radius'))
+
+        user_location = Point(user_lon, user_lat, srid=4326)
+
+        schools = School.objects.annotate(
+            distance=Distance('coordinates', user_location)
+        ).filter(distance__lte=radius * 1000).order_by('distance')
+
+        serializer = SchoolSerializer(schools, many=True)
+        return Response(serializer.data)
+
+    except (TypeError, ValueError):
+        if not user_lat or not user_lon or not radius:
+            return Response({"error": "Missing required fields."}, status=400)
+        else:
+            return Response({"error": "Unknown error"},
+                            status=400)

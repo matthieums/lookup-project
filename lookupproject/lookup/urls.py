@@ -23,5 +23,7 @@ urlpatterns = [
     # API endpoints
     path("teachers/get", views.getTeacher, name="getTeacher"),
     path("courses/get/<str:course_discipline>", views.getCourse, name="getCourse"),
-    path("schools/get/", views.getSchool, name="getSchool")
+    path("schools/get/", views.getSchool, name="getSchool"),
+    path("geoschool", views.get_nearby_locations, name="geoschool"),
+
 ]
