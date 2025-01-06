@@ -24,6 +24,9 @@ Lookup
                     </select>
                 </div>
                 <div class="col-2">
+                    <!-- ATTENTION -->
+                     <!-- La majuscule à la valeur va être un problème en cas d'ajout de nouvelles données à la base de donnée -->
+                      <!-- Vérifier que les valeurs correspondent à ce qu'on retrouve dans les modèles -->
                     <select class="form-select" id="age-group-select" aria-label="age_group">
                         <option selected>Age group</option>
                         <option value="Children">Children</option>
@@ -37,9 +40,8 @@ Lookup
                 <div class="col-2">
                     <select class="form-select" aria-label="radius">
                         <option selected>Radius (km)</option>
-                        <option value="1">10km</option>
-                        <option value="2">10km</option>
-                        <option value="3">Anywhere</option>
+                        <option value="10">&gt;10km</option>
+                        <option value="50">&gt;50km</option>
                     </select>
                 </div>
             </div>

@@ -115,6 +115,8 @@ def getCourse(request):
     discipline = request.GET.get('discipline')
     age_group = request.GET.get('age_group')
     radius = request.GET.get('radius')
+    user_lon = request.GET.get('user_lon')
+    user_lat = request.GET.get('user_lat')
 
     courses = Course.objects.all()
 
@@ -123,7 +125,12 @@ def getCourse(request):
     if age_group:
         courses = courses.filter(target_audience=age_group)
     if radius:
-        pass
+        user_location = Point(float(user_lon), float(user_lat), srid=4326)
+        nearby_schools = School.objects.annotate(
+            distance=Distance('coordinates', user_location)
+        ).filter(distance__lte=radius * 1000).order_by('distance')
+
+        courses = courses.filter(place__in=nearby_schools)
 
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)

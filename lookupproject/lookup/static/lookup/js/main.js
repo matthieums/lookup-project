@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
             discipline: null,
             age_group: null,
             radius: null,
+            user_lon: userCoordinates[0],
+            user_lat: userCoordinates[1]
         }
 
         formSelects.forEach((selectForm) => {
