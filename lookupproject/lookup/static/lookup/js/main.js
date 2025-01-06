@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchBar.classList.add('search-bar')
 
         searchBar.addEventListener('keyup', function(event) {
-            searchQuery = event.target.value
+            const searchQuery = event.target.value
                 narrowResults(searchQuery)
         })
         return searchBar;
