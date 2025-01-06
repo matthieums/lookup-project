@@ -23,21 +23,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class SchoolSerializer(serializers.ModelSerializer):
 
+    distance = serializers.SerializerMethodField()
+
     class Meta:
         model = School
-        fields = ['name', 'location', 'contact', 'website']
+        fields = ['name', 'location', 'contact', 'website', 'distance']
 
-
-# Additional improvements
-# from rest_framework import serializers
-# from .models import School
-
-# class SchoolSerializer(serializers.ModelSerializer):
-#     distance = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = School
-#         fields = ['id', 'name', 'location', 'distance']
-
-#     def get_distance(self, obj):
-#         return round(obj.distance.km, 2)
+    def get_distance(self, obj):
+        return obj.distance.km
