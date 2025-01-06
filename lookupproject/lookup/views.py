@@ -111,16 +111,22 @@ def getTeacher(request):
 
 
 @api_view(['GET'])
-def getCourse(request, course_discipline):
-    course = Course.objects.filter(discipline=course_discipline.lower())
-    if not course.exists():
-        return JsonResponse({
-            "error": f"Course with id {course_discipline} does not exist"
-        })
+def getCourse(request):
+    discipline = request.GET.get('discipline')
+    age_group = request.GET.get('age_group')
+    radius = request.GET.get('radius')
 
-    if request.method == 'GET':
-        serializer = CourseSerializer(course, many=True)
-        return Response(serializer.data)
+    courses = Course.objects.all()
+
+    if discipline:
+        courses = courses.filter(discipline=discipline)
+    if age_group:
+        courses = courses.filter(target_audience=age_group)
+    if radius:
+        pass
+
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

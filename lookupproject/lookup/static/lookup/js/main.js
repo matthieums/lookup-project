@@ -29,13 +29,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetchAndDisplayNearbySchools(userCoordinates, radius_in_meters)
 
-        // Manage buttons to display appropriate results on index page 
-        const categories = document.querySelector('#discipline-select');
+        // Prepare the fetch request with the appropriate parameters. 
+        const formSelects = Array.from(document.querySelectorAll('.form-select'));
+        let params = {
+            discipline: null,
+            age_group: null,
+            radius: null,
+        }
 
-        categories.addEventListener('change', function (event) {
-            const categoryName = event.target.value
-            const fetchUrl = `courses/get/${categoryName}`
-            fetchAndRender(fetchUrl)
+        formSelects.forEach((selectForm) => {
+            selectForm.addEventListener('change', function (event) {
+                const value = event.target.value;
+                const selectType = selectForm.getAttribute('aria-label');
+                params[selectType] = value;
+                
+                const queryString = Object.entries(params)
+                .filter(([key, value]) => value !== null)
+                .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                .join('&');
+
+                const fetchUrl = `courses/get?${queryString}`;
+                fetchAndRender(fetchUrl);
+            })
         })
 
     } else if (path === newSchoolView) {
