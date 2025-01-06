@@ -30,15 +30,12 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchAndDisplayNearbySchools(userCoordinates, radius_in_meters)
 
         // Manage buttons to display appropriate results on index page 
-        const categories = Array.from(document.querySelectorAll('.category'))
+        const categories = document.querySelector('#discipline-select');
 
-        categories.forEach(category => {
-            const categoryName = category.textContent
+        categories.addEventListener('change', function (event) {
+            const categoryName = event.target.value
             const fetchUrl = `courses/get/${categoryName}`
-            category.addEventListener('click', (event) => {
-                event.preventDefault();
-                fetchAndRender(fetchUrl)
-            })
+            fetchAndRender(fetchUrl)
         })
 
     } else if (path === newSchoolView) {
