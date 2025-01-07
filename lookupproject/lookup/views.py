@@ -118,6 +118,9 @@ def getCourse(request):
     user_lon = request.GET.get('user_lon')
     user_lat = request.GET.get('user_lat')
 
+    if not any([discipline, age_group, radius]):
+        return Response([])
+
     courses = Course.objects.all()
 
     if discipline:

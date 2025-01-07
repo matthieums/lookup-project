@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
             selectForm.addEventListener('change', function (event) {
                 const value = event.target.value;
                 const selectType = selectForm.getAttribute('aria-label');
-                params[selectType] = value;
+                params[selectType] = value ? value : null;
                 
                 const queryString = Object.entries(params)
-                .filter(([key, value]) => value !== null)
+                .filter(([key, value]) => value !== null && value !== "")
                 .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
                 .join('&');
 
