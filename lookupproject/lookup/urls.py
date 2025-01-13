@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/register", views.register, name="register"),
+
     path("", views.index, name="index"),
     path("about", views.about, name="about"),
     path("courses", views.courses, name="courses"),

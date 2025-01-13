@@ -1,16 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.http import JsonResponse, Http404
-from django.urls import reverse
+from django.http import Http404
 from lookup.models import Course, Teacher, School
-import json
 from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm, SchoolForm, enrollForm
+from .forms import CourseForm, SchoolForm, enrollForm, BaseUserCreationForm
 
 
 def index(request):
     return render(request, "lookup/index.html")
+
+
+def register(request):
+    if request.method == 'POST':
+        form = BaseUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = BaseUserCreationForm()
+
+    return render(request, 'lookup/register.html', {
+        'form': form
+    })
 
 
 def courses(request):
