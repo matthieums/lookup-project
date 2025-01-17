@@ -35,7 +35,7 @@ TARGET_AUDIENCE_CHOICES = {
 }
 
 
-class customUser(AbstractUser):
+class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('student', 'Student'),
         ('teacher', 'Teacher'),
@@ -49,6 +49,14 @@ class customUser(AbstractUser):
     def is_teacher(self):
         return self.role == 'teacher'
     
+
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
+    
+
+
+
 class School(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, validators=[validate_location])
