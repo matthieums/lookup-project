@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import Teacher, School, Course
+from .models import CustomUser, School, Course
 
 
 class TeacherSerializer(serializers.ModelSerializer):
     schools = serializers.StringRelatedField(many=True)
 
     class Meta:
-        model = Teacher
-        fields = ['name', 'last_name', 'schools', 'disciplines',
+        model = CustomUser
+        fields = ['id', 'username', 'first_name', 'last_name', 'schools', 'discipline',
                   'mailaddress', 'phone_number']
 
 

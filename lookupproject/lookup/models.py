@@ -38,6 +38,9 @@ STUDENT = 'student'
 TEACHER = 'teacher'
 class CustomUser(AbstractUser):
 
+    class Meta:
+        db_table = 'lookup_customuser' 
+
     ROLE_CHOICES = [
         (STUDENT, 'Student'),
         (TEACHER, 'Teacher'),
