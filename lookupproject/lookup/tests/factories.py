@@ -16,7 +16,7 @@ STYLES = {
 fake = Faker()
 
 class Audiences(BaseProvider):
-    def randomAudience(self) -> str:
+    def randomAudience(self):
         return random.choice(list(TARGET_AUDIENCE_CHOICES.values()))
 
 
@@ -25,12 +25,13 @@ class Disciplines(BaseProvider):
         return random.choice(list(DISCIPLINE_CHOICES.values()))
 
 
-random_style_provider = DynamicProvider(
-    provider_name='style',
-    elements=[random.choice(random.choice(list(STYLES.values())))],
-)
+class Styles(BaseProvider):
+    def randomStyle(self):
+        return random.choice(random.choice(list(STYLES.values())))
 
-fake.add_provider(random_style_provider)
+
+
+fake.add_provider(Styles)
 fake.add_provider(Audiences)
 fake.add_provider(Disciplines)
 
@@ -72,7 +73,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Course
 
-    name = fake.style()
+    name = factory.LazyAttribute(lambda _: fake.randomStyle())    
     description = factory.Faker('text')
     schedule = timezone.make_aware(fake.date_time_this_year())
     target_audience = factory.LazyAttribute(lambda _: fake.randomAudience())  # LazyAttribute needed for dynamic audience selection
