@@ -63,13 +63,17 @@ class CustomUser(AbstractUser):
     
 
 
+# User's default fields:
+# id
+# username
+# first_name
+# last_name
+# email
+# password
+# ...
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
-
-
-class TeacherProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
-
 
 
 class School(models.Model):
@@ -82,24 +86,24 @@ class School(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
 
-class Teacher(models.Model):
-    name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
     schools = models.ManyToManyField(
         School,
         related_name='teachers',
         verbose_name='school where this person teaches'
         )
     disciplines = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
-    mailaddress = models.EmailField(max_length=254, unique=True)
     phone_number = models.CharField(max_length=15)
 
     def serialize(self):
         return serializers.serialize('json', [self])
     
     def __str__(self) -> str:
-        return f"{self.name} {self.last_name}"
+        return f"{self.user.first_name} {self.user.last_name}"
+
 
 
 class Course(models.Model):
@@ -111,7 +115,7 @@ class Course(models.Model):
         related_name='courses',
         verbose_name='where the course takes place'
         )
-    teachers = models.ManyToManyField(Teacher, related_name='courses')
+    teachers = models.ManyToManyField(TeacherProfile, related_name='courses')
     schedule = models.DateTimeField(
         auto_now=False,
         auto_now_add=False
