@@ -1,9 +1,11 @@
 from django.urls import path, include
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/register", views.register, name="register"),
+    path("accounts/login/", auth_views.LoginView.as_view()),
 
     path("", views.index, name="index"),
     path("about", views.about, name="about"),

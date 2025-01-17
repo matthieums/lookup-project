@@ -5,6 +5,7 @@ from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -69,7 +70,7 @@ def contact(request):
 def about(request):
     return render(request, "lookup/about.html")
 
-
+@login_required
 def new_school(request):
     print('view called')
     if request.method == 'POST':
@@ -102,7 +103,7 @@ def school_profile(request, school_id):
 def success(request):
     return render(request, 'lookup/success.html')
 
-
+@login_required
 def enroll(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     form = enrollForm()
