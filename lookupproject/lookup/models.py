@@ -34,26 +34,41 @@ TARGET_AUDIENCE_CHOICES = {
     CHILDREN: 'Children'
 }
 
-
+STUDENT = 'student'
+TEACHER = 'teacher'
 class CustomUser(AbstractUser):
+
     ROLE_CHOICES = [
-        ('student', 'Student'),
-        ('teacher', 'Teacher'),
+        (STUDENT, 'Student'),
+        (TEACHER, 'Teacher'),
     ]
     
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=STUDENT)
 
     def is_student(self):
-        return self.role == 'student'
+        return self.role == STUDENT
     
     def is_teacher(self):
-        return self.role == 'teacher'
+        return self.role == TEACHER
+    
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        if is_new:
+            if self.role == STUDENT:
+                StudentProfile.objects.create(user=self)
+            elif self.role == TEACHER:
+                TeacherProfile.objects.create(user=self)
     
 
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
-    
+
+
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
 
 
 
