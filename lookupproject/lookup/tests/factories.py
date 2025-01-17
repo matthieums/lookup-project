@@ -50,18 +50,21 @@ class TeacherFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CustomUser
 
+    username = factory.Faker('user_name')
     first_name = factory.Faker('name')
     last_name = factory.Faker('last_name')
-    mail_address = factory.Faker('email')
+    email = factory.Faker('email')
     role = 'teacher'
 
 class StudentFactory(factory.django.DjangoModelFactory):
 
-    class meta:
+    class Meta:
         model = CustomUser
+
+    username = factory.Faker('user_name')
     first_name = factory.Faker('name')
     last_name = factory.Faker('last_name')
-    mail_address = factory.Faker('email')
+    email = factory.Faker('email')
     role = 'student'
 
 
@@ -72,6 +75,6 @@ class CourseFactory(factory.django.DjangoModelFactory):
     name = fake.style()
     description = factory.Faker('text')
     schedule = timezone.make_aware(fake.date_time_this_year())
-    target_audience = fake.randomAudience()
-    discipline = fake.randomDiscipline()
+    target_audience = factory.LazyAttribute(lambda _: fake.randomAudience())  # LazyAttribute needed for dynamic audience selection
+    discipline = factory.LazyAttribute(lambda _: fake.randomDiscipline())
     online = False
