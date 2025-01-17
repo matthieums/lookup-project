@@ -3,7 +3,6 @@
 # library and an imageField.
 # TO-DO: import library to check phone numbers
 # If a class is online, what do I do with addresses etc?
-from django.core import serializers
 from django.db import models
 from lookup.validators import validate_location
 from django.contrib.gis.db import models
@@ -36,6 +35,7 @@ TARGET_AUDIENCE_CHOICES = {
 
 STUDENT = 'student'
 TEACHER = 'teacher'
+
 class CustomUser(AbstractUser):
 
     class Meta:
@@ -54,9 +54,9 @@ class CustomUser(AbstractUser):
     def is_teacher(self):
         return self.role == TEACHER
     
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # is_new = self.pk is None
+    #     super().save(*args, **kwargs)
 
         # if is_new:
         #     if self.role == STUDENT:

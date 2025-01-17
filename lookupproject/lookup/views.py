@@ -174,10 +174,17 @@ from .serializers import SchoolSerializer
 @api_view(['POST'])
 def get_nearby_locations(request):
     try:
-        user_lat = float(request.data.get('user_lat'))
-        user_lon = float(request.data.get('user_lon'))
-        radius = float(request.data.get('radius'))
+        user_lat = request.data.get('user_lat')
+        user_lon = request.data.get('user_lon')
+        radius = request.data.get('radius')
 
+        if not all([user_lat, user_lon, radius]):
+            return Response({"error": "Missing required fields."}, status=400)
+        
+        user_lat = float(user_lat)
+        user_lon = float(user_lon)
+        radius = float(radius)
+        
         user_location = Point(user_lon, user_lat, srid=4326)
 
         schools = School.objects.annotate(

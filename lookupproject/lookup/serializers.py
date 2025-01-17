@@ -27,7 +27,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ['name', 'location', 'contact', 'website', 'distance']
+        fields = ['name', 'location', 'coordinates', 'contact', 'website', 'distance']
 
     def get_distance(self, obj):
         return obj.distance.km
