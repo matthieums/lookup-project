@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import Http404
 from lookup.models import Course, CustomUser, School
-from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
+from .serializers import UserSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
@@ -121,7 +121,7 @@ def getTeacher(request):
         raise Http404("No teachers found.")
 
     if request.method == 'GET':
-        serializer = TeacherSerializer(teachers, many=True)
+        serializer = UserSerializer(teachers, many=True)
         return Response(serializer.data)
 
 
