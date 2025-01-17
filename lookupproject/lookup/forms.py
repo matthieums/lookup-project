@@ -1,12 +1,17 @@
 from django import forms
-from .models import Course, School
+from .models import Course, School, CustomUser
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-class BaseUserCreationForm(UserCreationForm):
+class NewUserForm(UserCreationForm):
+
+    role = forms.ChoiceField(choices=[('student', 'Student'), ('teacher', 'Teacher')])
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        model = CustomUser
+        fields = ['username', 'email', 'role']
+
+
+
 
 class CourseForm(forms.ModelForm):
     class Meta:

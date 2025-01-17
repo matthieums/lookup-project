@@ -55,11 +55,11 @@ class CustomUser(AbstractUser):
         is_new = self.pk is None
         super().save(*args, **kwargs)
 
-        if is_new:
-            if self.role == STUDENT:
-                StudentProfile.objects.create(user=self)
-            elif self.role == TEACHER:
-                TeacherProfile.objects.create(user=self)
+        # if is_new:
+        #     if self.role == STUDENT:
+        #         StudentProfile.objects.create(user=self)
+        #     elif self.role == TEACHER:
+        #         TeacherProfile.objects.create(user=self)
     
 
 
@@ -72,8 +72,8 @@ class CustomUser(AbstractUser):
 # password
 # ...
 
-class StudentProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
+# class StudentProfile(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
 
 
 class School(models.Model):
@@ -87,22 +87,23 @@ class School(models.Model):
         return self.name
     
     
-class TeacherProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
+# class TeacherProfile(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
 
-    schools = models.ManyToManyField(
-        School,
-        related_name='teachers',
-        verbose_name='school where this person teaches'
-        )
-    disciplines = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
-    phone_number = models.CharField(max_length=15)
+#     schools = models.ManyToManyField(
+#         School,
+#         related_name='teachers',
+#         verbose_name='school where this person teaches',
+#         blank=True
+#         )
+#     discipline = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
+#     phone_number = models.CharField(max_length=15, blank=True)
 
-    def serialize(self):
-        return serializers.serialize('json', [self])
+#     def serialize(self):
+#         return serializers.serialize('json', [self])
     
-    def __str__(self) -> str:
-        return f"{self.user.first_name} {self.user.last_name}"
+#     def __str__(self) -> str:
+#         return f"{self.user.first_name} {self.user.last_name}"
 
 
 
@@ -115,7 +116,7 @@ class Course(models.Model):
         related_name='courses',
         verbose_name='where the course takes place'
         )
-    teachers = models.ManyToManyField(TeacherProfile, related_name='courses')
+    teachers = models.ManyToManyField(CustomUser, related_name='courses')
     schedule = models.DateTimeField(
         auto_now=False,
         auto_now_add=False

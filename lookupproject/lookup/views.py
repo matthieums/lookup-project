@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import Http404
-from lookup.models import Course, Teacher, School
+from lookup.models import Course, CustomUser, School
 from .serializers import TeacherSerializer, CourseSerializer, SchoolSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm, SchoolForm, enrollForm, BaseUserCreationForm
+from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
+
+
 
 
 def index(request):
@@ -13,12 +15,12 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
-        form = BaseUserCreationForm(request.POST)
+        form = NewUserForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')
     else:
-        form = BaseUserCreationForm()
+        form = NewUserForm()
 
     return render(request, 'lookup/register.html', {
         'form': form
@@ -35,7 +37,7 @@ def courses(request):
 
 def teachers(request):
     if request.method == 'GET':
-        teachers = Teacher.objects.all()
+        teachers = TeacherProfile.objects.all()
 
         return render(request, "lookup/teachers.html", {
             'teachers': teachers
@@ -84,7 +86,7 @@ def new_school(request):
 
 
 def teacher_profile(request, teacher_id):
-    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    teacher = get_object_or_404(TeacherProfile, pk=teacher_id)
     return render(request, "lookup/teacher_profile.html", {
         'teacher': teacher
     })
@@ -113,7 +115,7 @@ def enroll(request, course_id):
 
 @api_view(['GET'])
 def getTeacher(request):
-    teachers = Teacher.objects.all()
+    teachers = TeacherProfile.objects.all()
     if not teachers.exists():
         raise Http404("No teachers found.")
 
