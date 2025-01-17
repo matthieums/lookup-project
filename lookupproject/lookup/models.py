@@ -7,6 +7,7 @@ from django.core import serializers
 from django.db import models
 from lookup.validators import validate_location
 from django.contrib.gis.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.geos import Point
 
 # Multiple choices for the discipline
@@ -34,6 +35,20 @@ TARGET_AUDIENCE_CHOICES = {
 }
 
 
+class customUser(AbstractUser):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('teacher', 'Teacher'),
+    ]
+    
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+
+    def is_student(self):
+        return self.role == 'student'
+    
+    def is_teacher(self):
+        return self.role == 'teacher'
+    
 class School(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, validators=[validate_location])
