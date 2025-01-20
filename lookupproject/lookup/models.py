@@ -82,34 +82,13 @@ class CustomUser(AbstractUser):
 class School(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, validators=[validate_location])
-    coordinates = models.PointField(blank=True, null=True)
+    coordinates = models.PointField(blank=True, null=True, srid=4326)
     contact = models.EmailField(max_length=254, unique=True)
     website = models.URLField(max_length=200, blank=True)
 
     def __str__(self) -> str:
         return self.name
     
-    
-# class TeacherProfile(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
-
-#     schools = models.ManyToManyField(
-#         School,
-#         related_name='teachers',
-#         verbose_name='school where this person teaches',
-#         blank=True
-#         )
-#     discipline = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
-#     phone_number = models.CharField(max_length=15, blank=True)
-
-#     def serialize(self):
-#         return serializers.serialize('json', [self])
-    
-#     def __str__(self) -> str:
-#         return f"{self.user.first_name} {self.user.last_name}"
-
-
-
 class Course(models.Model):
     name = models.CharField(max_length=80)
     description = models.TextField(max_length=800)
@@ -134,3 +113,25 @@ class Course(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    
+# class TeacherProfile(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
+
+#     schools = models.ManyToManyField(
+#         School,
+#         related_name='teachers',
+#         verbose_name='school where this person teaches',
+#         blank=True
+#         )
+#     discipline = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
+#     phone_number = models.CharField(max_length=15, blank=True)
+
+#     def serialize(self):
+#         return serializers.serialize('json', [self])
+    
+#     def __str__(self) -> str:
+#         return f"{self.user.first_name} {self.user.last_name}"
+
+
+

@@ -42,7 +42,8 @@ class Coordinates(BaseProvider):
         (51.2154, 3.2252),
         (50.7579, 3.2895),
         (51.2200, 4.4036),
-    ]    
+    ]  
+
     def randomCoordinates(self):
         lat, lon = random.choice(self.coordinates)
         return Point(lon, lat)

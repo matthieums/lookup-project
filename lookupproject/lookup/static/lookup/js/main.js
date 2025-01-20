@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.nearby-schools-container').innerHTML = '<p>Loading...</p>';
 
         // Development data
-        const userCoordinates = [50.8503, 4.3517];
-        const radius_in_meters = 10000000000000000000
+        const userCoordinates = [51.18, 4.4];
+        const radius_in_meters = 1000
 
         fetchAndDisplayNearbySchools(userCoordinates, radius_in_meters)
 
@@ -34,13 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
         let params = {
             discipline: null,
             age_group: null,
-            radius: null,
+            radius: radius_in_meters,
             user_lon: userCoordinates[0],
             user_lat: userCoordinates[1]
         }
 
         formSelects.forEach((selectForm) => {
             selectForm.addEventListener('change', function (event) {
+                document.querySelector('.results-container').innerHTML = 'LOADING...'
                 const value = event.target.value;
                 const selectType = selectForm.getAttribute('aria-label');
                 params[selectType] = value ? value : null;
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (path === schoolsView) {
             formatResultsAsStrings(data)
         }
-        
+
         const resultsContainer = document.querySelector('.results-container')
         const searchBar = searchBarFactory()
         resultsContainer.prepend(searchBar);

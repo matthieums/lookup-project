@@ -6,7 +6,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.gis.measure import D
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
 
 
 
@@ -144,9 +146,9 @@ def getCourse(request):
         courses = courses.filter(target_audience=age_group)
     if radius:
         user_location = Point(float(user_lon), float(user_lat), srid=4326)
-        nearby_schools = School.objects.annotate(
-            distance=Distance('coordinates', user_location)
-        ).filter(distance__lte=radius * 1000).order_by('distance')
+        nearby_schools = School.objects.filter(
+            coordinates__distance_lte=(user_location, D(km=radius))
+            )
 
         courses = courses.filter(place__in=nearby_schools)
 
@@ -165,9 +167,7 @@ def getSchool(request):
         return Response(serializer.data)
 
 
-from django.contrib.gis.geos import Point
-from django.contrib.gis.db.models.functions import Distance
-from .serializers import SchoolSerializer
+
 
 # Later down the road, consider using django signals
 # To get and validate geographic coordinates
@@ -183,13 +183,13 @@ def get_nearby_locations(request):
         
         user_lat = float(user_lat)
         user_lon = float(user_lon)
-        radius = float(radius)
-        
+        radius = float(radius*1000)
+
         user_location = Point(user_lon, user_lat, srid=4326)
 
         schools = School.objects.annotate(
             distance=Distance('coordinates', user_location)
-        ).filter(distance__lte=radius * 1000).order_by('distance')
+        ).filter(distance__lte=radius).order_by('distance')
 
         serializer = SchoolSerializer(schools, many=True)
         return Response(serializer.data)
