@@ -115,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Renders data and adds a search bar
     function renderResults(data) {
+        const resultsContainer = document.querySelector('.results-container')
+
         let containersToHide = [];
         
         if (path === indexView) {
@@ -131,17 +133,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (path === indexView) {
             formatResultsAsCards(data)
+            const searchBar = searchBarFactory()
+            resultsContainer.prepend(searchBar);
         } else if (path === myCoursesView) {
-            formatResultsAsCards(data)
+            formatResultsAsTable(data)
         } else if (path === teachersView) {
             formatResultsAsStrings(data)
+            const searchBar = searchBarFactory()
+            resultsContainer.prepend(searchBar);
         } else if (path === schoolsView) {
             formatResultsAsStrings(data)
+            const searchBar = searchBarFactory()
+            resultsContainer.prepend(searchBar);
         }
 
-        const resultsContainer = document.querySelector('.results-container')
-        const searchBar = searchBarFactory()
-        resultsContainer.prepend(searchBar);
+
     }
 
     function formatResultsAsStrings(data) {
@@ -178,6 +184,29 @@ document.addEventListener('DOMContentLoaded', function () {
     function hideUnnecessaryContainers(containers) {
         containers.forEach(container => {
             container.classList.add('d-none')
+        })
+    }
+
+    function formatResultsAsTable(data) {        
+        const tableBody = document.querySelector('.table-body')
+        tableBody.innerHTML = ''
+
+        data.forEach(({ name, students, place, schedule }) => {
+            const row = document.createElement('tr');
+
+            [name, students, place, schedule].forEach((value) => {
+                const cell = document.createElement('td');
+                if (value === students) {
+                    if (students === null || students === undefined) {
+                        value = '0 ';
+                    } else {
+                        value = students.length;
+                    }
+                }
+                cell.textContent = value;
+                row.appendChild(cell);
+            })
+            tableBody.appendChild(row);
         })
     }
 
