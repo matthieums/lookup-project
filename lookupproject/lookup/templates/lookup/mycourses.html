@@ -1,0 +1,13 @@
+{% extends 'lookup/layout.html' %}
+
+{% block title %}
+MyCourses
+{% endblock %}
+
+{% block body %}
+    <h2>My Courses</h2>
+    <div class="results-container">
+    </div>
+
+    <div hidden class='user-id'>{{ user.id }}</div>
+{% endblock %}

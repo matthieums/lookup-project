@@ -18,7 +18,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id', 'name', 'description', 'schedule', 'target_audience',
-                  'place', 'teacher', 'discipline', 'online']
+                  'place', 'teacher', 'discipline', 'online', 'created_by']
 
 
 class SchoolSerializer(serializers.ModelSerializer):
@@ -36,6 +36,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 class CourseQueryParamsSerializer(serializers.Serializer):
     discipline = serializers.CharField(required=False)
     age_group = serializers.CharField(required=False)
-    radius = serializers.FloatField(required=True, min_value=0)
-    user_lon = serializers.FloatField(required=True)
-    user_lat = serializers.FloatField(required=True)
+    radius = serializers.FloatField(required=False, min_value=0)
+    user_lon = serializers.FloatField(required=False)
+    user_lat = serializers.FloatField(required=False)
+    created_by = serializers.FloatField(required=False)

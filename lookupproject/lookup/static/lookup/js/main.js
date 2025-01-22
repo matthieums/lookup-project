@@ -7,6 +7,7 @@ const newSchoolView ='/newschool'
 const schoolsView = '/schools'
 const contactView = '/contact'
 const locationBasedBrowser = '/geoschool'
+const myCoursesView = '/mycourses'
 // If I change the API key, make sure I change it in the validators.py file too
 const ApiKey = '931a2f65384241b19147a6b601733f10'
 
@@ -80,6 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    } else if (path === myCoursesView) {
+        // fetch courses using user id and return all courses created with this id
+        // Display courses created by user
+        const id = document.querySelector('.user-id').innerHTML
+        const url = `courses/get?${encodeURIComponent('created_by')}=${encodeURIComponent(id)}`
+        fetchAndRender(url)
+
     } else if (path === teachersView) {
         const fetchUrl = ('/teachers/get')
         fetchAndRender(fetchUrl)
@@ -122,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
         hideUnnecessaryContainers(containersToHide)
 
         if (path === indexView) {
+            formatResultsAsCards(data)
+        } else if (path === myCoursesView) {
             formatResultsAsCards(data)
         } else if (path === teachersView) {
             formatResultsAsStrings(data)

@@ -21,6 +21,11 @@ def index(request):
     return render(request, "lookup/index.html")
 
 
+def my_courses(request):
+    return render(request, 'lookup/mycourses.html', {
+        'user': request.user
+    })
+
 def register(request):
     if request.method == 'POST':
         form = NewUserForm(request.POST)
@@ -177,17 +182,20 @@ def getCourse(request):
     serializer = CourseQueryParamsSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
     
+    user_id = request.GET.get('created_by')
     discipline = request.GET.get('discipline')
     age_group = request.GET.get('age_group')
     radius = request.GET.get('radius')
     user_lon = request.GET.get('user_lon')
     user_lat = request.GET.get('user_lat')
 
-    if not any([discipline, age_group, radius]):
+    if not any([discipline, age_group, radius, user_id]):
         return Response([])
 
     courses = Course.objects.all()
 
+    if user_id:
+        courses = courses.filter(created_by=user_id)
     if discipline:
         courses = courses.filter(discipline=discipline)
     if age_group:

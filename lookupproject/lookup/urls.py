@@ -8,6 +8,7 @@ urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view()),
 
     path("", views.index, name="index"),
+    path("mycourses", views.my_courses, name="my_courses"),
     path("about", views.about, name="about"),
     path("courses", views.courses, name="courses"),
     path("teachers", views.teachers, name="teachers"),
