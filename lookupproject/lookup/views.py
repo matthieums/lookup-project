@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import Http404
 from lookup.models import Course, CustomUser, School
-from .serializers import UserSerializer, CourseSerializer, SchoolSerializer
+from .serializers import UserSerializer, CourseSerializer, SchoolSerializer, CourseQueryParamsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
@@ -129,6 +129,9 @@ def getTeacher(request):
 
 @api_view(['GET'])
 def getCourse(request):
+    serializer = CourseQueryParamsSerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+    
     discipline = request.GET.get('discipline')
     age_group = request.GET.get('age_group')
     radius = request.GET.get('radius')
@@ -180,7 +183,7 @@ def get_nearby_locations(request):
 
         if not all([user_lat, user_lon, radius]):
             return Response({"error": "Missing required fields."}, status=400)
-        
+
         user_lat = float(user_lat)
         user_lon = float(user_lon)
         radius = float(radius*1000)

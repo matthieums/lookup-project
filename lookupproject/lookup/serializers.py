@@ -31,3 +31,11 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     def get_distance(self, obj):
         return obj.distance.km
+    
+
+class CourseQueryParamsSerializer(serializers.Serializer):
+    discipline = serializers.CharField(required=False)
+    age_group = serializers.CharField(required=False)
+    radius = serializers.FloatField(required=True, min_value=0)
+    user_lon = serializers.FloatField(required=True)
+    user_lat = serializers.FloatField(required=True)
