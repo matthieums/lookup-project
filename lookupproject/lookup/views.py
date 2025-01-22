@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.core.mail import send_mail, send_mass_mail
 
 
 
@@ -131,8 +132,25 @@ def enroll(request, course_id):
             elif course.is_full():
                 return JsonResponse({'error': 'Course is full.'}, status=400)
             
+            course_creator = course.created_by
             course.students.add(user)
-            # Send mail to teacher
+            message1 = (
+                "A student has enrolled to your course",
+                f"{user} enrolled in your course {course.name}",
+                "from@example.com",  # What sender email be?
+                f'{[course_creator.email]}',
+                )
+            message2 = (
+                "Succesfully enrolled",
+                f"""
+                Thank you for enrolling in this course.
+                Here is the practical information:
+                {course.name}, {course.place}, {course.schedule}
+                """,
+                "from@example.com",
+                f'{[user.email]}'
+            )
+            send_mass_mail((message1, message2), fail_silently=False)
             return HttpResponseRedirect(reverse('success'))
 
         except ObjectDoesNotExist:
