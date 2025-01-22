@@ -59,10 +59,12 @@ def schools(request):
         })
 
 
+@login_required
 def contact(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
+            form.instance.created_by = request.user
             form.save()
             return HttpResponseRedirect("success")
     else:
@@ -130,6 +132,7 @@ def enroll(request, course_id):
                 return JsonResponse({'error': 'Course is full.'}, status=400)
             
             course.students.add(user)
+            # Send mail to teacher
             return HttpResponseRedirect(reverse('success'))
 
         except ObjectDoesNotExist:
