@@ -4,11 +4,13 @@ from lookup.models import Course, CustomUser, School
 from .serializers import UserSerializer, CourseSerializer, SchoolSerializer, CourseQueryParamsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm, SchoolForm, enrollForm, NewUserForm
+from .forms import CourseForm, SchoolForm, NewUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
+from django.http import JsonResponse
+from django.db import IntegrityError
 
 
 
@@ -105,15 +107,36 @@ def school_profile(request, school_id):
 def success(request):
     return render(request, 'lookup/success.html')
 
+
 @login_required
 def enroll(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
-    form = enrollForm()
+    user = request.user
 
-    return render(request, 'lookup/course.html', {
-        'course': course,
-        'form': form
-    })
+    if request.method == 'GET':
+        course = get_object_or_404(Course, pk=course_id)
+        return render(request, 'lookup/course.html', {
+            'course': course,
+            'user': user
+        })
+
+    elif request.method == 'POST':
+        try:
+            course = Course.objects.get(id=course_id)
+            if user in course.students.all():
+                return JsonResponse({'error': 'User is already enrolled in this course.'}, status=400)
+            course.students.add(user)
+            # Save USER in COURSE with ID
+            # If already enrolled, error
+            # If course is full, error
+            # Have a boolean flag that switches if full+method
+            # If course is full: modal should display an error message
+
+            return HttpResponseRedirect("../success")
+        
+        except IntegrityError as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+
+
 
 
 @api_view(['GET'])

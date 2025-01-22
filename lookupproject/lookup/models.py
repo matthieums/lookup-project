@@ -89,7 +89,8 @@ class School(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
+
 class Course(models.Model):
     name = models.CharField(max_length=80)
     description = models.TextField(max_length=800)
