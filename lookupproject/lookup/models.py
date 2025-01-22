@@ -94,6 +94,12 @@ class School(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=80)
     description = models.TextField(max_length=800)
+    created_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='course_creator',
+        default='admin'
+        )
     place = models.ForeignKey(
         School,
         on_delete=models.CASCADE,
@@ -121,7 +127,7 @@ class Course(models.Model):
     capacity = models.PositiveIntegerField(default=1)
 
     def __str__(self) -> str:
-        return self.name
+        return f'{self.name}, created by {self.created_by}'
 
     def is_full(self):
         return self.students.count() >= self.capacity
