@@ -85,6 +85,7 @@ class StudentFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     email = factory.Faker('email')
     role = 'student'
+    password = factory.PostGenerationMethodCall('set_password', 'testpass')
 
 
 class CourseFactory(factory.django.DjangoModelFactory):

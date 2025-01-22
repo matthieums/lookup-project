@@ -118,9 +118,13 @@ class Course(models.Model):
         related_name='enrolled_courses',
         verbose_name='students enrolled in this course'
         )
+    capacity = models.PositiveIntegerField(default=1)
 
     def __str__(self) -> str:
         return self.name
+
+    def is_full(self):
+        return self.students.count() >= self.capacity
 
     
 # class TeacherProfile(models.Model):

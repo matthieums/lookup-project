@@ -11,6 +11,8 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from django.http import JsonResponse
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 
 
 
@@ -124,16 +126,15 @@ def enroll(request, course_id):
             course = Course.objects.get(id=course_id)
             if user in course.students.all():
                 return JsonResponse({'error': 'User is already enrolled in this course.'}, status=400)
+            elif course.is_full():
+                return JsonResponse({'error': 'Course is full.'}, status=400)
+            
             course.students.add(user)
-            # Save USER in COURSE with ID
-            # If already enrolled, error
-            # If course is full, error
-            # Have a boolean flag that switches if full+method
-            # If course is full: modal should display an error message
+            return HttpResponseRedirect(reverse('success'))
 
-            return HttpResponseRedirect("../success")
-        
-        except IntegrityError as e:
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Course not found.'}, status=404)
+        except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
 
 
