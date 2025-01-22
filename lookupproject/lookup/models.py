@@ -53,6 +53,7 @@ class CustomUser(AbstractUser):
     
     def is_teacher(self):
         return self.role == TEACHER
+        
     
     # def save(self, *args, **kwargs):
     #     # is_new = self.pk is None
@@ -95,7 +96,7 @@ class Course(models.Model):
     place = models.ForeignKey(
         School,
         on_delete=models.CASCADE,
-        related_name='courses',
+        related_name='taught_courses',
         verbose_name='where the course takes place'
         )
     teachers = models.ManyToManyField(CustomUser, related_name='courses')
@@ -110,6 +111,12 @@ class Course(models.Model):
     )
     discipline = models.CharField(choices=DISCIPLINE_CHOICES)
     online = models.BooleanField(default=False)
+    students = models.ManyToManyField(
+        CustomUser,
+        blank=True,
+        related_name='enrolled_courses',
+        verbose_name='students enrolled in this course'
+        )
 
     def __str__(self) -> str:
         return self.name
