@@ -295,3 +295,11 @@ def get_nearby_locations(request):
         else:
             return Response({"error": "Unknown error"},
                             status=400)
+
+
+def participants(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+
+    return render(request, 'lookup/participants.html', {
+        'course': course
+    })
