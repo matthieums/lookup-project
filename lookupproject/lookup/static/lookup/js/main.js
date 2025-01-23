@@ -194,15 +194,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         data.forEach(({ id, name, students, place, schedule }) => {
             const row = document.createElement('tr');
-
+            let studentCount = students.length;
             [name, students, place, schedule].forEach((value) => {
                 const cell = document.createElement('td');
                 if (value === students) {
-                    if (students === null || students === undefined) {
-                        value = '0 ';
-                    } else {
-                        value = students.length;
-                    }
+                    value = studentCount;
                 }
                 cell.textContent = value;
                 row.appendChild(cell);
