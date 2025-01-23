@@ -136,13 +136,15 @@ def enroll(request, course_id):
                 return JsonResponse({'error': 'User is already enrolled in this course.'}, status=400)
             elif course.is_full():
                 return JsonResponse({'error': 'Course is full.'}, status=400)
-            
+
             course.students.add(user)
+            # Should I add more logic? Reserializing data and checking that it is 
+            # valid before sending it to the db?
             message1 = (
                 "A student has enrolled to your course",
                 f"{user} enrolled in your course {course.name}",
                 "from@example.com",  # What sender email be?
-                f'{[course_creator.email]}',
+                [course_creator.email]
                 )
             message2 = (
                 "Succesfully enrolled",
@@ -152,7 +154,7 @@ def enroll(request, course_id):
                 {course.name}, {course.place}, {course.schedule}
                 """,
                 "from@example.com",
-                f'{[user.email]}'
+                [user.email]
             )
             send_mass_mail((message1, message2), fail_silently=False)
             return HttpResponseRedirect(reverse('success'))
@@ -167,10 +169,29 @@ def delete_course(request, course_id):
         course = get_object_or_404(Course, pk=course_id)
         user = request.user
         course_creator = course.created_by
+        students = course.students
 
         try:
             if course_creator == user:
+                mails = []
+                course_name = course.name
+                course_place = course.place
+                course_schedule = course.schedule
+                for student in students.all():
+                    mail = (
+                        "Course cancellation",
+                        f"""
+                        This message was sent because a course you were enrolled
+                        in was deleted. We are sorry:
+                        {course_name}, {course_place}, {course_schedule}
+                        """,
+                        "from@example.com",
+                        [student.email]
+                    )
+                    mails.append(mail)
                 course.delete()
+                send_mass_mail((mail for mail in mails), fail_silently=False)
+
                 return HttpResponseRedirect(reverse('my_courses'))
             else:
                 return JsonResponse({'error': 'You do not have the rights to delete this course'})
