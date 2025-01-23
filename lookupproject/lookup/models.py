@@ -36,25 +36,29 @@ TARGET_AUDIENCE_CHOICES = {
 STUDENT = 'student'
 TEACHER = 'teacher'
 
+
 class CustomUser(AbstractUser):
 
     class Meta:
-        db_table = 'lookup_customuser' 
+        db_table = 'lookup_customuser'
 
     ROLE_CHOICES = [
         (STUDENT, 'Student'),
         (TEACHER, 'Teacher'),
     ]
-    
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=STUDENT)
+
+    role = models.CharField(
+        max_length=10,
+        choices=ROLE_CHOICES
+        )
 
     def is_student(self):
         return self.role == STUDENT
-    
+
     def is_teacher(self):
         return self.role == TEACHER
-        
-    
+
+
     # def save(self, *args, **kwargs):
     #     # is_new = self.pk is None
     #     super().save(*args, **kwargs)
@@ -64,7 +68,7 @@ class CustomUser(AbstractUser):
         #         StudentProfile.objects.create(user=self)
         #     elif self.role == TEACHER:
         #         TeacherProfile.objects.create(user=self)
-    
+
 
 
 # User's default fields:

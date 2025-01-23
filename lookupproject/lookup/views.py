@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
@@ -16,7 +16,7 @@ from django.shortcuts import (
     HttpResponseRedirect
 )
 
-from .models import Course, School
+from .models import Course, School, CustomUser, STUDENT, TEACHER
 from .forms import CourseForm, SchoolForm, NewUserForm
 from .serializers import (
     UserSerializer,
@@ -106,7 +106,7 @@ def course(request, course_id):
 
 def teachers(request):
     if request.method == 'GET':
-        teachers = TeacherProfile.objects.all()
+        teachers = CustomUser.objects.filter(role=TEACHER)
 
         return render(request, "lookup/teachers.html", {
             'teachers': teachers
@@ -123,12 +123,17 @@ def schools(request):
 
 @login_required
 def create_course(request):
+    if request.user.role != TEACHER:
+        return HttpResponseForbidden(
+            "Creating a course is restricted to teachers."
+            )
+
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
             form.instance.created_by = request.user
             form.save()
-            return HttpResponseRedirect("success")
+            return redirect(reverse(("success")))
     else:
         form = CourseForm()
 
@@ -143,12 +148,16 @@ def about(request):
 
 @login_required
 def create_school(request):
-    print('view called')
+    if request.user.role != TEACHER:
+        return HttpResponseForbidden(
+            "Creating a course is restricted to teachers."
+            )
+
     if request.method == 'POST':
         form = SchoolForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('success')
+            return redirect(reverse(('success')))
     else:
         form = SchoolForm()
 

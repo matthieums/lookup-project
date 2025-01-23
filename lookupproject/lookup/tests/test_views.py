@@ -17,7 +17,7 @@ SUCCESS = reverse('success')
 
 # Tests to check if the views respond properly
 class TestViews(TestCase):
-    """Check that all views respond properly"""
+    """Check that all views respond with status code 200"""
     def test_index_response(self):
         response = self.client.get(INDEX)
         self.assertEqual(response.status_code, 200)
@@ -28,6 +28,10 @@ class TestViews(TestCase):
 
     def test_courses_response(self):
         response = self.client.get(COURSES)
+        self.assertEqual(response.status_code, 200)
+
+    def test_teachers_response(self):
+        response = self.client.get(TEACHERS)
         self.assertEqual(response.status_code, 200)
 
     def test_schools_response(self):
@@ -44,8 +48,7 @@ class TestViews(TestCase):
 
 
 class TestUnauthenticatedLoginRequired(TestCase):
-    """Check that some views are restricted to logged in users"""
-
+    """Check that restricted views redirect unauthenticated users"""
     def test_unauthenticated_new_course_response(self):
         response = self.client.get(CREATE_COURSE)
         self.assertEqual(response.status_code, 302)
@@ -55,32 +58,46 @@ class TestUnauthenticatedLoginRequired(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class TestAuthenticatedLoginRequired(TestCase):
-    """Check that logged in users can access restricted views"""
+class TestTeacherAndStudentRestrictions(TestCase):
+    """Check that students and teachers have different authorizations"""
     def setUp(self):
-        self.user = CustomUser.objects.create_user(
-            username='testuser',
-            password='password123'
+        self.student = CustomUser.objects.create_user(
+            username='student_user',
+            password='password123',
+            role='student'
+            )
+        self.teacher = CustomUser.objects.create_user(
+            username='teacher_user',
+            password='password123',
+            role='teacher'
             )
 
-    def test_authenticated_create_course_response(self):
-        self.client.login(username='testuser', password='password123')
+    def test_student_create_course_response(self):
+        self.client.login(username='student_user', password='password123')
+        response = self.client.get(CREATE_COURSE)
+        self.assertEqual(response.status_code, 403)
+
+    def test_teacher_create_course_response(self):
+        self.client.login(username='teacher_user', password='password123')
         response = self.client.get(CREATE_COURSE)
         self.assertEqual(response.status_code, 200)
 
-    def test_authenticated_create_school_response(self):
-        self.client.login(username='testuser', password='password123')
+    def test_student_create_school_response(self):
+        self.client.login(username='student_user', password='password123')
+        response = self.client.get(CREATE_SCHOOL)
+        self.assertEqual(response.status_code, 403)
+
+    def test_teacher_create_school_response(self):
+        self.client.login(username='teacher_user', password='password123')
         response = self.client.get(CREATE_SCHOOL)
         self.assertEqual(response.status_code, 200)
 
-        # register
-        # teachers
+
+class TestApiDependentViews(TestCase):
+    """Check views requiring arguments in their URL"""
         # new_school
         # teacher_profile
         # school_profile
-        # Success
-        # Enroll
-
 
     # API dependant
     # my_courses
