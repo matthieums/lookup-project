@@ -20,3 +20,7 @@ class EnrollTestCase(TestCase):
 
         response = self.client.post(f'/enroll/{self.course.id}/')
         self.assertEqual(response.status_code, 404)
+
+
+class CourseCreationTestCase(TesCase):
+    

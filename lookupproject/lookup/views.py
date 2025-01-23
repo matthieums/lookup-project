@@ -122,7 +122,7 @@ def schools(request):
 
 
 @login_required
-def contact(request):
+def create_course(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
@@ -132,7 +132,7 @@ def contact(request):
     else:
         form = CourseForm()
 
-    return render(request, "lookup/contact.html", {
+    return render(request, "lookup/course_form.html", {
         'form': form
     })
 
@@ -142,7 +142,7 @@ def about(request):
 
 
 @login_required
-def new_school(request):
+def create_school(request):
     print('view called')
     if request.method == 'POST':
         form = SchoolForm(request.POST)

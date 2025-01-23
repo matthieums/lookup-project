@@ -8,10 +8,18 @@ urlpatterns = [
      path("courses", views.courses, name="courses"),
      path("teachers", views.teachers, name="teachers"),
      path("schools", views.schools, name="schools"),
-     path("contact", views.contact, name="contact"),
-     path("newschool", views.new_school, name="new_school"),
+     path("create_course", views.create_course, name="create_course"),
+     path("newschool", views.create_school, name="new_school"),
      path("mycourses", views.my_courses, name="my_courses"),
+     path("success", views.success, name="success"),
 
+     # Api dependant paths
+     path("course/<int:course_id>", views.course, name="course"),
+     path(
+          "course/<int:course_id>/participants",
+          views.participants,
+          name="participants"
+          ),
      path("teachers/<int:teacher_id>",
           views.teacher_profile,
           name="teacher_profile"
@@ -19,14 +27,6 @@ urlpatterns = [
      path("schools/<int:school_id>",
           views.school_profile,
           name="school_profile"
-          ),
-
-     path("success", views.success, name="success"),
-     path("course/<int:course_id>", views.course, name="course"),
-     path(
-          "enroll/<int:course_id>/participants",
-          views.participants,
-          name="participants"
           ),
 
      # Authentication logic
