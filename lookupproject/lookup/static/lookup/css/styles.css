@@ -20,3 +20,7 @@ input, select, textarea {
 .autocomplete-container {
     position: relative;
 }
+
+.course-row :hover {
+    cursor: pointer;
+}

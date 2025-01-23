@@ -209,6 +209,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.id = id
             })
             tableBody.appendChild(row);
+            row.classList.add('course-row')
+            row.addEventListener('click', () => {
+                window.location.href = `enroll/${id}`;
+            })
+
         })
     }
 
