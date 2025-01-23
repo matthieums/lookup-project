@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const url = `courses/get?${encodeURIComponent('created_by')}=${encodeURIComponent(id)}`
         fetchAndRender(url)
 
-    } else if (path.startsWith('/enroll/') && path.endsWith('/participants')) {
+    } else if (path.startsWith('/course/') && path.endsWith('/participants')) {
         const printButton = document.getElementById('print-button')
         const content = document.getElementById('printable-body')
         
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
             tableBody.appendChild(row);
             row.classList.add('course-row')
             row.addEventListener('click', () => {
-                window.location.href = `enroll/${id}`;
+                window.location.href = `course/${id}`;
             })
 
         })
