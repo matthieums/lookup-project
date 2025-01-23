@@ -1,13 +1,9 @@
-# TO-DO : Add validators for emails, urls, etc.
-# TO-DO : Add the possibility to add a picture => Will need the Pillow
-# library and an imageField.
-# TO-DO: import library to check phone numbers
-# If a class is online, what do I do with addresses etc?
-from django.db import models
-from lookup.validators import validate_location
-from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.gis.geos import Point
+from django.db import models
+from django.contrib.gis.db import models as gis_models
+
+from lookup.validators import validate_location
+
 
 # Multiple choices for the discipline
 MUSIC = 'music'
@@ -33,6 +29,7 @@ TARGET_AUDIENCE_CHOICES = {
     CHILDREN: 'Children'
 }
 
+# User roles
 STUDENT = 'student'
 TEACHER = 'teacher'
 
@@ -59,35 +56,10 @@ class CustomUser(AbstractUser):
         return self.role == TEACHER
 
 
-    # def save(self, *args, **kwargs):
-    #     # is_new = self.pk is None
-    #     super().save(*args, **kwargs)
-
-        # if is_new:
-        #     if self.role == STUDENT:
-        #         StudentProfile.objects.create(user=self)
-        #     elif self.role == TEACHER:
-        #         TeacherProfile.objects.create(user=self)
-
-
-
-# User's default fields:
-# id
-# username
-# first_name
-# last_name
-# email
-# password
-# ...
-
-# class StudentProfile(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
-
-
 class School(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, validators=[validate_location])
-    coordinates = models.PointField(blank=True, null=True, srid=4326)
+    coordinates = gis_models.PointField(blank=True, null=True, srid=4326)
     contact = models.EmailField(max_length=254, unique=True)
     website = models.URLField(max_length=200, blank=True)
 
@@ -135,25 +107,3 @@ class Course(models.Model):
 
     def is_full(self):
         return self.students.count() >= self.capacity
-
-    
-# class TeacherProfile(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_profile')
-
-#     schools = models.ManyToManyField(
-#         School,
-#         related_name='teachers',
-#         verbose_name='school where this person teaches',
-#         blank=True
-#         )
-#     discipline = models.CharField(choices=DISCIPLINE_CHOICES, max_length=20)
-#     phone_number = models.CharField(max_length=15, blank=True)
-
-#     def serialize(self):
-#         return serializers.serialize('json', [self])
-    
-#     def __str__(self) -> str:
-#         return f"{self.user.first_name} {self.user.last_name}"
-
-
-

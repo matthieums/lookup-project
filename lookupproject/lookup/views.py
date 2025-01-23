@@ -148,7 +148,7 @@ def about(request):
 
 @login_required
 def create_school(request):
-    if request.user.role != TEACHER:
+    if request.user.is_student:
         return HttpResponseForbidden(
             "Creating a course is restricted to teachers."
             )
@@ -156,18 +156,8 @@ def create_school(request):
     if request.method == 'POST':
         form = SchoolForm(request.POST)
         if form.is_valid():
-            try:
-                form.save()
-                return redirect(reverse(('success')))
-            except IntegrityError:
-                messages.error(request, "This school already exists or there's a database issue.")
-                return redirect('create_school')
-            except OperationalError:
-                messages.error(request, "There was a problem connecting to the database.")
-                return redirect('create_school')
-            except Exception as e:
-                messages.error(request, f"An unexpected error occurred: {str(e)}")
-                return redirect('create_school')
+            form.save()
+            return redirect(reverse(('success')))
     else:
         form = SchoolForm()
 
