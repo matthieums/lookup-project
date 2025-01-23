@@ -187,11 +187,12 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 
-    function formatResultsAsTable(data) {        
+    function formatResultsAsTable(data) {
+        // TO-DO: Make more reusable. This function is only usable on one type of data. 
         const tableBody = document.querySelector('.table-body')
         tableBody.innerHTML = ''
 
-        data.forEach(({ name, students, place, schedule }) => {
+        data.forEach(({ id, name, students, place, schedule }) => {
             const row = document.createElement('tr');
 
             [name, students, place, schedule].forEach((value) => {
@@ -205,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 cell.textContent = value;
                 row.appendChild(cell);
+                row.id = id
             })
             tableBody.appendChild(row);
         })
