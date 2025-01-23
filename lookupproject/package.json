@@ -1,5 +1,8 @@
 {
+  "type": "module",
   "dependencies": {
-    "@geoapify/geocoder-autocomplete": "^2.1.0"
+    "@geoapify/geocoder-autocomplete": "^2.1.0",
+    "html2pdf.js": "^0.10.2",
+    "vite": "^6.0.11"
   }
 }

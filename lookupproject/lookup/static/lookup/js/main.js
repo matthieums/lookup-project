@@ -1,4 +1,3 @@
-
 // Globals
 var path = window.location.pathname;
 const indexView = '/'
@@ -7,10 +6,10 @@ const newSchoolView ='/newschool'
 const schoolsView = '/schools'
 const contactView = '/contact'
 const locationBasedBrowser = '/geoschool'
+const participantsView = '/participants'
 const myCoursesView = '/mycourses'
 // If I change the API key, make sure I change it in the validators.py file too
 const ApiKey = '931a2f65384241b19147a6b601733f10'
-
 
 document.addEventListener('DOMContentLoaded', function () {
 //     getUserCoordinates()
@@ -88,6 +87,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const url = `courses/get?${encodeURIComponent('created_by')}=${encodeURIComponent(id)}`
         fetchAndRender(url)
 
+    } else if (path.startsWith('/enroll/') && path.endsWith('/participants')) {
+        const printButton = document.getElementById('print-button')
+        const content = document.getElementById('printable-body')
+        
+        printButton.addEventListener('click', () => {
+            console.log('click')
+            html2pdf()
+            .set({
+                margin: 1,
+                filename: 'participants.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            })
+            .from(content)
+            .save();
+        })
     } else if (path === teachersView) {
         const fetchUrl = ('/teachers/get')
         fetchAndRender(fetchUrl)

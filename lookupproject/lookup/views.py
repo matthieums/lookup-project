@@ -262,8 +262,6 @@ def getSchool(request):
         return Response(serializer.data)
 
 
-
-
 # Later down the road, consider using django signals
 # To get and validate geographic coordinates
 @api_view(['POST'])
@@ -296,10 +294,16 @@ def get_nearby_locations(request):
             return Response({"error": "Unknown error"},
                             status=400)
 
-
+@login_required
 def participants(request, course_id):
+    user = request.user
     course = get_object_or_404(Course, pk=course_id)
+    course_creator = course.created_by
 
-    return render(request, 'lookup/participants.html', {
-        'course': course
-    })
+    if user == course_creator:
+        return render(request, 'lookup/participants.html', {
+            'course': course
+        })
+
+    else:
+        return JsonResponse({'error': 'You are not allowed to view this page\'s content.'})
