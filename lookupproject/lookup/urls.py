@@ -31,5 +31,6 @@ urlpatterns = [
     path("courses/get/", views.getCourse, name="getCourse"),
     path("schools/get/", views.getSchool, name="getSchool"),
     path("geoschool", views.get_nearby_locations, name="geoschool"),
+    path("delete/<int:course_id>", views.delete_course, name="delete_course")
 
 ]

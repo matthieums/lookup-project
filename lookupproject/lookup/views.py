@@ -120,10 +120,11 @@ def success(request):
 
 @login_required
 def enroll(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
     user = request.user
-
+    course_creator = course.created_by
+    
     if request.method == 'GET':
-        course = get_object_or_404(Course, pk=course_id)
         return render(request, 'lookup/course.html', {
             'course': course,
             'user': user
@@ -131,13 +132,11 @@ def enroll(request, course_id):
 
     elif request.method == 'POST':
         try:
-            course = Course.objects.get(id=course_id)
             if user in course.students.all():
                 return JsonResponse({'error': 'User is already enrolled in this course.'}, status=400)
             elif course.is_full():
                 return JsonResponse({'error': 'Course is full.'}, status=400)
             
-            course_creator = course.created_by
             course.students.add(user)
             message1 = (
                 "A student has enrolled to your course",
@@ -162,6 +161,25 @@ def enroll(request, course_id):
             return JsonResponse({'error': 'Course not found.'}, status=404)
         except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+
+def delete_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(Course, pk=course_id)
+        user = request.user
+        course_creator = course.created_by
+
+        try:
+            if course_creator == user:
+                course.delete()
+                return HttpResponseRedirect(reverse('my_courses'))
+            else:
+                return JsonResponse({'error': 'You do not have the rights to delete this course'})
+            
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Course not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+        
 
 
 

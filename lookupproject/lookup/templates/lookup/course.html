@@ -10,14 +10,15 @@
       <p>{{ course.description }}</p>
       <p>{{ course.id }}</p>
 
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Cancel Course
+      </button>
 
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
       Enroll
     </button>
     
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -38,6 +39,35 @@
         </div>
       </div>
     </div>
+
+    {% if user.is_authenticated %}
+      {% if user.is_teacher %}
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to cancel this course?</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <h2>A mail will be sent to all who enrolled to this course</h2>
+              <p>We are sorry that you cannot provide the course anymore.
+              </p>
+              <form action="/delete/{{course.id}}" method="POST">
+                {% csrf_token %}
+                <div class="modal-footer">
+                  <input type="submit" class="btn btn-primary" value="delete">
+                </div>
+              </form>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endif %}
+
   </div>
 
 {% endblock %}
