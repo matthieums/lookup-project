@@ -1,20 +1,29 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.http import Http404
-from lookup.models import Course, CustomUser, School
-from .serializers import UserSerializer, CourseSerializer, SchoolSerializer, CourseQueryParamsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .forms import CourseForm, SchoolForm, NewUserForm
+
+from django.http import Http404, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-from django.http import JsonResponse
-from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
-from django.core.mail import send_mail, send_mass_mail
+from django.core.mail import send_mass_mail
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+    HttpResponseRedirect
+)
 
+from .models import Course, School
+from .forms import CourseForm, SchoolForm, NewUserForm
+from .serializers import (
+    UserSerializer,
+    CourseSerializer,
+    SchoolSerializer,
+    CourseQueryParamsSerializer
+)
 
 
 def index(request):
@@ -25,6 +34,7 @@ def my_courses(request):
     return render(request, 'lookup/mycourses.html', {
         'user': request.user
     })
+
 
 def register(request):
     if request.method == 'POST':
@@ -83,6 +93,7 @@ def contact(request):
 
 def about(request):
     return render(request, "lookup/about.html")
+
 
 @login_required
 def new_school(request):
@@ -164,6 +175,7 @@ def enroll(request, course_id):
         except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
 
+
 def delete_course(request, course_id):
     if request.method == 'POST':
         course = get_object_or_404(Course, pk=course_id)
@@ -195,16 +207,14 @@ def delete_course(request, course_id):
                 return HttpResponseRedirect(reverse('my_courses'))
             else:
                 return JsonResponse({'error': 'You do not have the rights to delete this course'})
-            
+
         except ObjectDoesNotExist:
             return JsonResponse({'error': 'Course not found.'}, status=404)
         except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
-        
 
 
-
-
+# API'S
 @api_view(['GET'])
 def getTeacher(request):
     teachers = TeacherProfile.objects.all()
@@ -293,6 +303,7 @@ def get_nearby_locations(request):
         else:
             return Response({"error": "Unknown error"},
                             status=400)
+
 
 @login_required
 def participants(request, course_id):
