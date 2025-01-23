@@ -50,14 +50,6 @@ def register(request):
     })
 
 
-def courses(request):
-    if request.method == 'GET':
-        courses = Course.objects.all()
-        return render(request, "lookup/courses.html", {
-            'courses': courses
-        })
-
-
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user

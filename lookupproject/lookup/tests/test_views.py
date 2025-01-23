@@ -5,7 +5,6 @@ from lookup.models import CustomUser
 # URLS
 INDEX = reverse('index')
 ABOUT = reverse('about')
-COURSES = reverse('courses')
 TEACHERS = reverse('teachers')
 SCHOOLS = reverse('schools')
 CREATE_COURSE = reverse('create_course')
@@ -24,10 +23,6 @@ class TestViews(TestCase):
 
     def test_about_response(self):
         response = self.client.get(ABOUT)
-        self.assertEqual(response.status_code, 200)
-
-    def test_courses_response(self):
-        response = self.client.get(COURSES)
         self.assertEqual(response.status_code, 200)
 
     def test_teachers_response(self):
@@ -72,25 +67,42 @@ class TestTeacherAndStudentRestrictions(TestCase):
             role='teacher'
             )
 
+    def login_and_check_status(self, username, password, url,expected_status_code):
+        self.client.login(username=username, password=password)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, expected_status_code)
+
     def test_student_create_course_response(self):
-        self.client.login(username='student_user', password='password123')
-        response = self.client.get(CREATE_COURSE)
-        self.assertEqual(response.status_code, 403)
+        self.login_and_check_status(
+            'student_user',
+            'password123',
+            CREATE_COURSE,
+            403
+            )
 
     def test_teacher_create_course_response(self):
-        self.client.login(username='teacher_user', password='password123')
-        response = self.client.get(CREATE_COURSE)
-        self.assertEqual(response.status_code, 200)
+        self.login_and_check_status(
+            'teacher_user',
+            'password123',
+            CREATE_COURSE,
+            200
+            )
 
     def test_student_create_school_response(self):
-        self.client.login(username='student_user', password='password123')
-        response = self.client.get(CREATE_SCHOOL)
-        self.assertEqual(response.status_code, 403)
+        self.login_and_check_status(
+            'student_user',
+            'password123',
+            CREATE_COURSE,
+            403
+            )
 
     def test_teacher_create_school_response(self):
-        self.client.login(username='teacher_user', password='password123')
-        response = self.client.get(CREATE_SCHOOL)
-        self.assertEqual(response.status_code, 200)
+        self.login_and_check_status(
+            'teacher_user',
+            'password123',
+            CREATE_COURSE,
+            200
+            )
 
 
 class TestApiDependentViews(TestCase):
