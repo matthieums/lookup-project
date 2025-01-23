@@ -21,6 +21,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 AUTH_USER_MODEL = "lookup.CustomUser"
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
