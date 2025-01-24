@@ -65,7 +65,7 @@ class SchoolFactory(factory.django.DjangoModelFactory):
     website = factory.LazyAttribute(lambda _: fake.url())
 
 
-class TeacherFactory(factory.django.DjangoModelFactory):
+class CustomUserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CustomUser
 
@@ -73,26 +73,22 @@ class TeacherFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker('name')
     last_name = factory.Faker('last_name')
     email = factory.Faker('email')
+    password = factory.PostGenerationMethodCall('set_password', 'testpass')
+
+
+class TeacherFactory(CustomUserFactory):
     role = 'teacher'
 
-class StudentFactory(factory.django.DjangoModelFactory):
 
-    class Meta:
-        model = CustomUser
-
-    username = factory.Faker('user_name')
-    first_name = factory.Faker('name')
-    last_name = factory.Faker('last_name')
-    email = factory.Faker('email')
+class StudentFactory(CustomUserFactory):
     role = 'student'
-    password = factory.PostGenerationMethodCall('set_password', 'testpass')
 
 
 class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Course
 
-    name = factory.LazyAttribute(lambda _: fake.randomStyle())    
+    name = factory.LazyAttribute(lambda _: fake.randomStyle())
     description = factory.Faker('text')
     schedule = timezone.make_aware(fake.date_time_this_year())
     target_audience = factory.LazyAttribute(lambda _: fake.randomAudience())  # LazyAttribute needed for dynamic audience selection
