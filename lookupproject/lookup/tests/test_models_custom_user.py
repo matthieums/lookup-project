@@ -2,8 +2,9 @@ from django.test import TestCase
 from lookup.models import CustomUser
 from django.db.utils import DataError
 
+
 class CustomUserModelTest(TestCase):
-    
+
     def setUp(self):
         self.student_user = CustomUser.objects.create_user(
             username='student1',

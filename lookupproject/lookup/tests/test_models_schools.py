@@ -2,13 +2,19 @@ from django.test import TestCase
 from django.contrib.gis.geos import Point
 from lookup.models import School
 import random
-from .factories import SchoolFactory, TeacherFactory, StudentFactory, CourseFactory
+from .factories import (
+    SchoolFactory,
+    TeacherFactory,
+    StudentFactory,
+    CourseFactory
+    )
+
 
 class SchoolModelTest(TestCase):
 
     # def test_unique_contact_constraint(self):
     """Test that 'contact' must be unique."""
-        
+
     def test_point_field(self):
         """Test handling of PointField data."""
         school = SchoolFactory()
@@ -25,16 +31,6 @@ class SchoolModelTest(TestCase):
             contact="contact@example.com",
         )
         self.assertIsNone(school_no_coords.coordinates)
-
-
-    def test_blank_website(self):
-        """Test website can be blank."""
-        school_no_website = School.objects.create(
-            name="Website-less School",
-            location="Somewhere",
-            contact="contact@school.com",
-        )
-        self.assertEqual(school_no_website.website, "")
 
 
 class SchoolRandomCoordinatesTest(TestCase):

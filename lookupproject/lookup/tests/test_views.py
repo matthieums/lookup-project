@@ -107,6 +107,7 @@ class TestTeacherAndStudentRestrictions(TestCase):
             )
 
 
+# TO-DO: SPLIT UP. TOO LONG.
 class TestApiDependentViews(TestCase):
     """Check views requiring arguments in their URL"""
 
@@ -201,9 +202,5 @@ class TestApiDependentViews(TestCase):
     # API dependant
     # my_courses
 
-    # delete_course
-    # getTeacher
-    # getCourse
-    # getSchool
     # get_nearby_locations
-    # participants
+

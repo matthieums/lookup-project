@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from django.http import Http404, JsonResponse, HttpResponseForbidden
+from django.http import Http404, JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
@@ -223,7 +223,7 @@ def getTeacher(request):
 def getCourse(request):
     serializer = CourseQueryParamsSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
-    
+
     user_id = request.GET.get('created_by')
     discipline = request.GET.get('discipline')
     age_group = request.GET.get('age_group')
@@ -232,7 +232,7 @@ def getCourse(request):
     user_lat = request.GET.get('user_lat')
 
     if not any([discipline, age_group, radius, user_id]):
-        return Response([])
+        return HttpResponseBadRequest('Empty query parameters')
 
     courses = Course.objects.all()
 
@@ -243,12 +243,16 @@ def getCourse(request):
     if age_group:
         courses = courses.filter(target_audience=age_group)
     if radius:
-        user_location = Point(float(user_lon), float(user_lat), srid=4326)
-        nearby_schools = School.objects.filter(
-            coordinates__distance_lte=(user_location, D(km=radius))
+        try:
+            user_lon = float(user_lon)
+            user_lat = float(user_lat)
+            user_location = Point(float(user_lon), float(user_lat), srid=4326)
+            nearby_schools = School.objects.filter(
+                coordinates__distance_lte=(user_location, D(km=radius))
             )
-
-        courses = courses.filter(place__in=nearby_schools)
+            courses = courses.filter(place__in=nearby_schools)
+        except (ValueError, TypeError):
+            return HttpResponseBadRequest('Invalid latitude or longitude values')
 
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
