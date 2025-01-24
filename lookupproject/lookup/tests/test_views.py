@@ -1,6 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.urls import reverse
 from lookup.models import CustomUser
+from lookup.tests.factories import SchoolFactory, TeacherFactory, StudentFactory, CourseFactory
+from lookup.models import Course
 
 # URLS
 INDEX = reverse('index')
@@ -107,6 +109,91 @@ class TestTeacherAndStudentRestrictions(TestCase):
 
 class TestApiDependentViews(TestCase):
     """Check views requiring arguments in their URL"""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.teacher = TeacherFactory(
+            username="teacher_user",
+            password="password123",
+            role="teacher"
+            )
+        cls.student = StudentFactory(
+            username="student_user",
+            password="password123",
+            role="student"
+            )
+        cls.school = SchoolFactory()
+        cls.course = CourseFactory(place=cls.school, created_by=cls.teacher)
+        cls.course.students.add(cls.student)
+
+    def test_01_individual_teacher_view(self):
+        url = f"{TEACHERS}/{self.teacher.id}"
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.teacher.first_name)
+
+    def test_02_individual_course_view(self):
+
+        url = reverse('course', args=[self.course.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_03_unauthenticated_participants_view(self):
+        url = reverse('participants', args=[self.course.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_04_authenticated_as_student_participants_view(self):
+        self.client.login(username='student_user', password='password123')
+
+        url = reverse('participants', args=[self.course.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_05_authenticated_as_creator_participants_view(self):
+        self.client.login(username='teacher_user', password='password123')
+
+        url = reverse('participants', args=[self.course.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_06_individual_existing_schools_view(self):
+        url = reverse('school_profile', args=[self.course.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_08_individual_nonexistent_schools_view(self):
+        existing_id = self.school.id
+        non_existent_id = existing_id + 1
+        url = reverse('school_profile', args=[non_existent_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_09_course_deletion_as_unauthenticated(self):
+        url = reverse('delete_course', args=[self.course.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_10_course_deletion_as_student(self):
+        self.client.login(username='student_user', password='password123')
+        url = reverse('delete_course', args=[self.course.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_11_course_deletion_as_creator(self):
+        self.assertTrue(Course.objects.filter(id=self.course.id).exists())
+
+        self.client.login(username='teacher_user', password='password123')
+
+        url = reverse('delete_course', args=[self.course.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Course.objects.filter(id=self.course.id).exists())
+
+
         # new_school
         # teacher_profile
         # school_profile

@@ -159,7 +159,7 @@ def create_school(request):
 
 
 def teacher_profile(request, teacher_id):
-    teacher = get_object_or_404(TeacherProfile, pk=teacher_id)
+    teacher = get_object_or_404(CustomUser, pk=teacher_id)
     return render(request, "lookup/teacher_profile.html", {
         'teacher': teacher
     })
@@ -183,36 +183,29 @@ def delete_course(request, course_id):
         course_creator = course.created_by
         students = course.students
 
-        try:
-            if course_creator == user:
-                mails = []
-                course_name = course.name
-                course_place = course.place
-                course_schedule = course.schedule
-                for student in students.all():
-                    mail = (
-                        "Course cancellation",
-                        f"""
-                        This message was sent because a course you were enrolled
-                        in was deleted. We are sorry:
-                        {course_name}, {course_place}, {course_schedule}
-                        """,
-                        "from@example.com",
-                        [student.email]
-                    )
-                    mails.append(mail)
-                course.delete()
-                send_mass_mail((mail for mail in mails), fail_silently=False)
+        if course_creator != user:
+            return HttpResponseForbidden('Only course creator can delete the course')
 
-                return HttpResponseRedirect(reverse('my_courses'))
-            else:
-                return JsonResponse({'error': 'You do not have the rights to delete this course'})
+        mails = []
+        course_name = course.name
+        course_place = course.place
+        course_schedule = course.schedule
+        for student in students.all():
+            mail = (
+                "Course cancellation",
+                f"""
+                This message was sent because a course you were enrolled
+                in was deleted. We are sorry:
+                {course_name}, {course_place}, {course_schedule}
+                """,
+                "from@example.com",
+                [student.email]
+            )
+            mails.append(mail)
+        course.delete()
+        send_mass_mail((mail for mail in mails), fail_silently=False)
 
-        except ObjectDoesNotExist:
-            return JsonResponse({'error': 'Course not found.'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
-
+    return HttpResponseRedirect(reverse('success'))
 
 # API'S
 @api_view(['GET'])
@@ -311,10 +304,11 @@ def participants(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     course_creator = course.created_by
 
-    if user == course_creator:
-        return render(request, 'lookup/participants.html', {
+    if user.id != course_creator.id:
+        return HttpResponseForbidden(
+            'Only the creator of this course can access its participants list.'
+        )
+
+    return render(request, 'lookup/participants.html', {
             'course': course
         })
-
-    else:
-        return JsonResponse({'error': 'You are not allowed to view this page\'s content.'})
