@@ -1,5 +1,29 @@
 import { fetchAndRender } from "./fetchUtils.js";
 import { displayLoadingDataSymbol } from "./domUtils.js";
+import { initializeUserCoordinates } from "./geoUtils.js"
+
+/**
+ * Initializes parameters for the filters.
+ * @returns {Promise<Object>} Resolves to an object containing filter parameters.
+ */
+export async function initializeParams() {
+    let params = {
+        discipline: null,
+        age_group: null,
+        radius: null,
+        user_lon: null,
+        user_lat: null
+    };
+    
+    const coordinates = await initializeUserCoordinates();
+    params.user_lat = coordinates[0];
+    params.user_lon = coordinates[1];
+    params.radius = setDefaultRadius();
+
+    return params
+}
+
+
 /**
  * Sets up dynamic filters by adding event listeners to form select elements.
  * When a user selects a new option, the corresponding parameter in the `params` object is updated.
@@ -36,6 +60,10 @@ export function setUpDynamicFilters(params, path) {
     })
 }
 
+/**
+ * Creates a search bar html with filtering behaviour.
+ * @returns {HTMLInputElement}
+ */
 export function searchBarFactory() {
     const searchBar = document.createElement('input');
     searchBar.type = 'text'
@@ -69,4 +97,14 @@ function narrowResults(searchQuery) {
             result.classList.remove('d-none')
         }
     })
+}
+
+
+/**
+ * Provides a default radius for filtering.
+ * @returns {number} The default radius in meters.
+ */
+export function setDefaultRadius() {
+    const defaultRadius = 1000
+    return defaultRadius
 }

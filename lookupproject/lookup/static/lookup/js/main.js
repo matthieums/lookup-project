@@ -1,16 +1,16 @@
-import { initializeParams } from './geoUtils.js';
+import { initializeParams } from './filterAndSearchUtils.js';
 import { CONFIG } from './config.js';
 import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
+import { fetchAndRender } from './fetchUtils.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
 
     if (currentPath === CONFIG.paths.indexView) {
-        
         const params = await initializeParams();
+
         setUpDynamicFilters(params, currentPath);
-        
         fetchAndDisplayNearbySchools(params);
 
     } else if (currentPath === CONFIG.paths.newSchoolView) {
@@ -33,9 +33,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     longitudeInput.value = longitude;
                     console.log(`${coordinates}`);                }
             });
-        
-
-
 
     } else if (currentPath === CONFIG.paths.myCoursesView) {
         // fetch courses using user id and return all courses created with this id

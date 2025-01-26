@@ -1,23 +1,4 @@
-/**
- * Initializes parameters for the filters.
- * @returns {Promise<Object>} Resolves to an object containing filter parameters.
- */
-export async function initializeParams() {
-    let params = {
-        discipline: null,
-        age_group: null,
-        radius: null,
-        user_lon: null,
-        user_lat: null
-    };
-    
-    const coordinates = await initializeUserCoordinates();
-    params.user_lat = coordinates[0];
-    params.user_lon = coordinates[1];
-    params.radius = setDefaultRadius();
 
-    return params
-}
 
 /**
  * Fetches the user's coordinates, or returns default coordinates if the location can't be fetched.
@@ -56,13 +37,4 @@ function getUserCoordinates() {
             reject('Geolocation is not supported by this browser');
         }
     });
-}
-
-/**
- * Provides a default radius for filtering.
- * @returns {number} The default radius in meters.
- */
-export function setDefaultRadius() {
-    const defaultRadius = 1000
-    return defaultRadius
 }
