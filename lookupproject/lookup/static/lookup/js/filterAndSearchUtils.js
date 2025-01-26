@@ -1,4 +1,5 @@
 import { fetchAndRender } from "./fetchUtils.js";
+import { displayLoadingDataSymbol } from "./domUtils.js";
 /**
  * Sets up dynamic filters by adding event listeners to form select elements.
  * When a user selects a new option, the corresponding parameter in the `params` object is updated.
@@ -10,11 +11,12 @@ import { fetchAndRender } from "./fetchUtils.js";
  */
 export function setUpDynamicFilters(params, path) {
     const formSelects = Array.from(document.querySelectorAll('.form-select'));
-    
+    const resultsContainer = document.querySelector('.results-container')
     let timeout;
 
     formSelects.forEach((selectForm) => {
         selectForm.addEventListener('change', function (event) {
+            displayLoadingDataSymbol(resultsContainer);
             const value = event.target.value;
             const selectType = selectForm.getAttribute('aria-label');
             params[selectType] = value ? value : null;

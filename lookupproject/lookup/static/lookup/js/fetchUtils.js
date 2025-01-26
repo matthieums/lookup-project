@@ -1,5 +1,5 @@
 import { searchBarFactory } from './filterAndSearchUtils.js';
-import { formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
+import { displayLoadingDataSymbol, formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
 
@@ -46,7 +46,9 @@ import { CONFIG } from './config.js';
         }
     }
 
-    export async function fetchAndDisplayNearbyCourses(params) {
+    export async function fetchAndDisplayNearbySchools(params) {
+        const resultsContainer = document.querySelector('.results-container');
+        displayLoadingDataSymbol(resultsContainer);
         fetch('/geoschool', {
             method: 'POST',
             headers: { 
@@ -64,15 +66,13 @@ import { CONFIG } from './config.js';
             }
             return response.json();
         })
-        .then(data => {
-            const nearbySchoolsContainer = document.querySelector('.nearby-schools-container');
-            nearbySchoolsContainer.innerHTML = '';
-    
+        .then(data => {    
             if (data.error) {
-                nearbySchoolsContainer.innerHTML = `${data.error}`;
+                resultsContainer.innerHTML = `${data.error}`;
             } else {
+                resultsContainer.innerHTML = ''
                 data.forEach(school => {
-                    nearbySchoolsContainer.innerHTML += school.name;
+                    resultsContainer.innerHTML += school.name;
                 });
             }
         })

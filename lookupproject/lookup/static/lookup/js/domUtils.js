@@ -106,3 +106,7 @@ export function formatResultsAsTable(data) {
 
         return card
     }
+
+    export function displayLoadingDataSymbol(container) {
+        container.innerHTML = '<p>Loading...</p>';
+    }

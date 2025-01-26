@@ -1,18 +1,17 @@
 import { initializeParams } from './geoUtils.js';
 import { CONFIG } from './config.js';
-import { fetchAndDisplayNearbyCourses } from './fetchUtils.js';
+import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
 
     if (currentPath === CONFIG.paths.indexView) {
-        document.querySelector('.nearby-schools-container').innerHTML = '<p>Loading...</p>';
         
         const params = await initializeParams();
         setUpDynamicFilters(params, currentPath);
-
-        fetchAndDisplayNearbyCourses(params);
+        
+        fetchAndDisplayNearbySchools(params);
 
     } else if (currentPath === CONFIG.paths.newSchoolView) {
         const autoCompleteContainer = document.getElementById("autocomplete");
