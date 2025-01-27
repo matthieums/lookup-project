@@ -5,17 +5,21 @@ Lookup
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container-fluid">
     
-    <div class="title-container">
-        <h2>Looking for your next class?</h2>
+    <div class="title-container row">
+        <div class="col-12">
+            <h2>Looking for your next class?</h2>
+        </div>
     </div>
 
-    <h2>For those who already know what they are looking for</h2>
     <div class="browse-container">
         <div class="row">
+            <div class="col-8">
+                <h2>For those who already know what they are looking for</h2>
+            </div>
             <div class="row">
-                <div class="col-2">
+                <div class="col-md-3 col-sm-4">
                     <select class="form-select" id="discipline-select" aria-label="discipline">
                         <option value="" selected>Discipline</option>
                         <option class="category" value="dance" >Dance</option>
@@ -23,7 +27,7 @@ Lookup
                         <option class="category" value="music">Music</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-md-3 col-sm-4">
                     <!-- ATTENTION -->
                      <!-- La majuscule à la valeur va être un problème en cas d'ajout de nouvelles données à la base de donnée -->
                       <!-- Vérifier que les valeurs correspondent à ce qu'on retrouve dans les modèles -->
@@ -37,7 +41,7 @@ Lookup
 
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-md-3 col-sm-4">
                     <select class="form-select" id="radius-select" aria-label="radius">
                         <option value="0" selected>Radius(km)</option>
                         <option value="10000">&gt;10km</option>
