@@ -4,10 +4,9 @@ export function hideUnnecessaryContainers(path) {
     let containersToHide = [];
     
     if (path === CONFIG.paths.indexView) {
-        const nearbySchoolsContainer = document.querySelector('.nearby-schools-container')
         const submitCourseContainer = document.querySelector('.submit-course-container');
-        const categoriesContainer = document.querySelector('.categories-container');    
-        containersToHide.push(categoriesContainer, submitCourseContainer, nearbySchoolsContainer);
+        const categoriesContainer = document.querySelector('.categories-container');
+        containersToHide.push(categoriesContainer, submitCourseContainer);
     } else if (path === CONFIG.paths.teachersView) {
         const teacherContainer = document.querySelector('.teacher-container')
         containersToHide.push(teacherContainer)
@@ -107,6 +106,26 @@ export function formatResultsAsTable(data) {
         return card
     }
 
-    export function displayLoadingDataSymbol(container) {
-        container.innerHTML = '<p>Loading...</p>';
+/**
+ * Shows or hides the loading indicator.
+ * @param {Element} container - The container where the data is displayed.
+ * @param {boolean} isLoading - Whether to show the loading symbol (true) or the data (false).
+ */
+    export function displayLoadingSpinner(isLoading, container) {
+        const spinner = document.getElementById('spinner');
+        if (isLoading) {
+            displaySpinner(container, spinner);
+        } else {
+            hideSpinner(container, spinner);
+        }
+    }
+
+    function displaySpinner(container, spinner) {
+        container.classList.add('d-none');
+        spinner.classList.remove('d-none');
+    }
+
+    function hideSpinner(container,spinner) {
+        spinner.classList.add('d-none');        
+        container.classList.remove('d-none');
     }

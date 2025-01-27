@@ -1,5 +1,5 @@
 import { fetchAndRender } from "./fetchUtils.js";
-import { displayLoadingDataSymbol } from "./domUtils.js";
+import { displayLoadingSpinner } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
 
 /**
@@ -38,9 +38,11 @@ export function setUpDynamicFilters(params, path) {
     const resultsContainer = document.querySelector('.results-container')
     let timeout;
 
+    appendSearchBar()
+
     formSelects.forEach((selectForm) => {
-        selectForm.addEventListener('change', function (event) {
-            displayLoadingDataSymbol(resultsContainer);
+        selectForm.addEventListener('change', (event) => {
+            displayLoadingSpinner(true, resultsContainer)       
             const value = event.target.value;
             const selectType = selectForm.getAttribute('aria-label');
             params[selectType] = value ? value : null;
@@ -72,15 +74,17 @@ export function searchBarFactory() {
 
     searchBar.addEventListener('keyup', function(event) {
         const searchQuery = event.target.value
-            narrowResults(searchQuery)
+        narrowResults(searchQuery)
     })
     return searchBar;
 }
 
 
 function narrowResults(searchQuery) {
+    const resultsContainer = document.querySelector('.results-container')
     const allResults = document.querySelectorAll('.result')
     const normalizedQuery = searchQuery.toLowerCase()
+    displayLoadingDataSymbol(resultsContainer);
 
     allResults.forEach(result => {
         let resultData;
@@ -107,4 +111,10 @@ function narrowResults(searchQuery) {
 export function setDefaultRadius() {
     const defaultRadius = 1000
     return defaultRadius
+}
+
+function appendSearchBar() {
+    const searchBarContainer = document.querySelector('.search-bar-container')
+    const searchBar = searchBarFactory()
+    searchBarContainer.prepend(searchBar)
 }

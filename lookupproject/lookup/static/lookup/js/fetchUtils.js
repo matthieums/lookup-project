@@ -1,5 +1,5 @@
 import { searchBarFactory } from './filterAndSearchUtils.js';
-import { displayLoadingDataSymbol, formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
+import { displayLoadingSpinner, formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
 
@@ -8,47 +8,48 @@ import { CONFIG } from './config.js';
     // fetchAndRender function
     // Answer my own question: Why did I use Post instead of Get for some fetch requests?
 
-    // Fetch data and call function to display data
-    export function fetchAndRender(url, path) {
-        fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error')
-            }
-            return response.json();
-        })
-        .then(data => renderResults(data, path))
-        .catch(error => {
-            console.log('error', error)
-        })
+/**
+ * Fetches data from the provided URL and renders the results.
+ * @param {string} url - The URL to fetch data from.
+ * @param {string} path - The path where the results will be rendered.
+ */
+export async function fetchAndRender(url, path) {
+    const resultsContainer = document.querySelector('.results-container')
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            displayLoadingSpinner(false, resultsContainer);
+            throw new Error('Error fetching data');
+        }
+        const data = await response.json();
+        renderResults(data, path); 
+    } catch (error) {
+        displayLoadingSpinner(false, resultsContainer);
+        console.error('Error:', error);
     }
+}
 
     // Renders data and adds a search bar
     function renderResults(data, path) {
         const resultsContainer = document.querySelector('.results-container')
-
         hideUnnecessaryContainers(path)
 
         if (path === CONFIG.paths.indexView) {
             formatResultsAsCards(data)
-            const searchBar = searchBarFactory()
-            resultsContainer.prepend(searchBar);
         } else if (path === CONFIG.paths.myCoursesView) {
             formatResultsAsTable(data)
         } else if (path === CONFIG.paths.teachersView) {
             formatResultsAsStrings(data)
-            const searchBar = searchBarFactory()
-            resultsContainer.prepend(searchBar);
         } else if (path === CONFIG.paths.schoolsView) {
             formatResultsAsStrings(data)
-            const searchBar = searchBarFactory()
-            resultsContainer.prepend(searchBar);
         }
+        displayLoadingSpinner(false, resultsContainer);
     }
 
     export async function fetchAndDisplayNearbySchools(params) {
         const resultsContainer = document.querySelector('.results-container');
-        displayLoadingDataSymbol(resultsContainer);
+        displayLoadingSpinner(true, resultsContainer)       
         fetch('/geoschool', {
             method: 'POST',
             headers: { 
@@ -62,11 +63,13 @@ import { CONFIG } from './config.js';
         })
         .then(response => {
             if (!response.ok) {
+                displayLoadingSpinner(false, resultsContainer)       
                 throw new Error('NETWORK RESPONSE WAS NOT OK')
             }
             return response.json();
         })
-        .then(data => {    
+        .then(data => {
+            displayLoadingSpinner(false, resultsContainer)       
             if (data.error) {
                 resultsContainer.innerHTML = `${data.error}`;
             } else {
@@ -77,6 +80,7 @@ import { CONFIG } from './config.js';
             }
         })
         .catch(error => {
+            displayLoadingSpinner(false, resultsContainer)       
             console.error('Error:', error);
             document.querySelector('.nearby-schools-container').innerHTML = 'AN ERROR HAS OCCURED';
         });
