@@ -1,5 +1,5 @@
 import { fetchAndRender } from "./fetchUtils.js";
-import { displayLoadingSpinner } from "./domUtils.js";
+import { displayLoadingSpinner, hideUnnecessaryContainers } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
 
 /**
@@ -41,7 +41,8 @@ export function setUpDynamicFilters(params, path) {
     formSelects.forEach((selectForm) => {
         selectForm.addEventListener('change', (event) => {
             if (!document.querySelector('.search-bar')) {
-                appendSearchBar()
+                appendSearchBar();
+                hideUnnecessaryContainers(path);
             }
 
             displayLoadingSpinner(true, resultsContainer)       
@@ -73,6 +74,7 @@ export function searchBarFactory() {
     searchBar.type = 'text'
     searchBar.placeholder = 'Search here'
     searchBar.classList.add('search-bar')
+    searchBar.classList.add('form-control')
 
     searchBar.addEventListener('keyup', function(event) {
         const searchQuery = event.target.value

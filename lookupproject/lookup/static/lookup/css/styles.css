@@ -24,3 +24,38 @@ input, select, textarea {
 .course-row :hover {
     cursor: pointer;
 }
+
+
+/* Hiding containers using a smooth slide */
+@keyframes hide {
+    0% {
+        opacity: 1;
+        height: var(--element-height);
+    }
+
+    75% {
+        opacity: 0;
+        height: var(--element-height);
+    }
+
+    100% {
+        opacity: 0;
+        height: 0;
+    }
+}
+
+.titles-container {
+    animation-name: hide;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+}
+
+.fade-slide-container {
+    transition: opacity 0.5s ease, height 0.5s ease, margin 0.5s ease, padding 0.5s ease;
+    opacity: 1;
+    height: auto;
+    overflow: hidden; /* Ensures smooth collapsing when height shrinks */
+  }
+  
+

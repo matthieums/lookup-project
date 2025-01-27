@@ -1,20 +1,18 @@
 import { CONFIG } from './config.js';
+import { fadeAndSlideOut } from './animations.js';
 
 export function hideUnnecessaryContainers(path) {
     let containersToHide = [];
     
     if (path === CONFIG.paths.indexView) {
         const submitCourseContainer = document.querySelector('.submit-course-container');
-        const categoriesContainer = document.querySelector('.categories-container');
-        containersToHide.push(categoriesContainer, submitCourseContainer);
+        const titlesContainer = document.querySelector('.titles-container')
+        containersToHide.push(submitCourseContainer,titlesContainer);
     } else if (path === CONFIG.paths.teachersView) {
         const teacherContainer = document.querySelector('.teacher-container')
         containersToHide.push(teacherContainer)
     }
-
-    containersToHide.forEach(container => {
-        container.classList.add('d-none')
-    })
+    fadeAndSlideOut(containersToHide);
 }
 
 export function formatResultsAsStrings(data) {
@@ -114,8 +112,12 @@ export function formatResultsAsTable(data) {
     export function displayLoadingSpinner(isLoading, container) {
         const spinner = document.getElementById('spinner');
         if (isLoading) {
+            // container fade out
+
             displaySpinner(container, spinner);
         } else {
+            // container fade in
+
             hideSpinner(container, spinner);
         }
     }

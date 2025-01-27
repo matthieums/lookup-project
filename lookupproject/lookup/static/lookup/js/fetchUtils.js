@@ -1,4 +1,3 @@
-import { searchBarFactory } from './filterAndSearchUtils.js';
 import { displayLoadingSpinner, formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
@@ -33,7 +32,6 @@ export async function fetchAndRender(url, path) {
     // Renders data and adds a search bar
     function renderResults(data, path) {
         const resultsContainer = document.querySelector('.results-container')
-        hideUnnecessaryContainers(path)
 
         if (path === CONFIG.paths.indexView) {
             formatResultsAsCards(data)
