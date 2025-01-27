@@ -29,26 +29,28 @@ export async function fetchAndRender(url, path) {
     }
 }
 
-    // Renders data and adds a search bar
-    function renderResults(data, path) {
-        const resultsContainer = document.querySelector('.results-container')
+// Renders data and adds a search bar
+function renderResults(data, path) {
+    const resultsContainer = document.querySelector('.results-container')
 
-        if (path === CONFIG.paths.indexView) {
-            formatResultsAsCards(data)
-        } else if (path === CONFIG.paths.myCoursesView) {
-            formatResultsAsTable(data)
-        } else if (path === CONFIG.paths.teachersView) {
-            formatResultsAsStrings(data)
-        } else if (path === CONFIG.paths.schoolsView) {
-            formatResultsAsStrings(data)
-        }
-        displayLoadingSpinner(false, resultsContainer);
+    if (path === CONFIG.paths.indexView) {
+        formatResultsAsCards(data)
+    } else if (path === CONFIG.paths.myCoursesView) {
+        formatResultsAsTable(data)
+    } else if (path === CONFIG.paths.teachersView) {
+        formatResultsAsStrings(data)
+    } else if (path === CONFIG.paths.schoolsView) {
+        formatResultsAsStrings(data)
     }
+    displayLoadingSpinner(false, resultsContainer);
+}
 
-    export async function fetchAndDisplayNearbySchools(params) {
-        const resultsContainer = document.querySelector('.results-container');
-        displayLoadingSpinner(true, resultsContainer)       
-        fetch('/geoschool', {
+export async function fetchAndDisplayNearbySchools(params) {
+    const resultsContainer = document.querySelector('.results-container');
+    
+    try {
+        displayLoadingSpinner(true, resultsContainer)
+        const response = await fetch('/geoschool', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -59,28 +61,25 @@ export async function fetchAndRender(url, path) {
                 radius: params.radius
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                displayLoadingSpinner(false, resultsContainer)       
-                throw new Error('NETWORK RESPONSE WAS NOT OK')
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayLoadingSpinner(false, resultsContainer)       
-            if (data.error) {
-                resultsContainer.innerHTML = `${data.error}`;
-            } else {
-                resultsContainer.innerHTML = ''
-                data.forEach(school => {
-                    resultsContainer.innerHTML += school.name;
-                });
-            }
-        })
-        .catch(error => {
-            displayLoadingSpinner(false, resultsContainer)       
-            console.error('Error:', error);
-            document.querySelector('.nearby-schools-container').innerHTML = 'AN ERROR HAS OCCURED';
-        });
+
+        if (!response.ok) {
+            throw new Error('NETWORK RESPONSE WAS NOT OK');
+        }
+        const data = await response.json();
+        if (data.error) {
+            resultsContainer.innerHTML = `${data.error}`;
+        } else {
+            resultsContainer.innerHTML = '';
+            let content = '';
+            data.forEach(school => {
+                content += `<div>${school.name}</div>`;
+            });
+            resultsContainer.innerHTML = content;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        resultsContainer.innerHTML = 'AN ERROR HAS OCCURRED';
+    } finally {
+        displayLoadingSpinner(false, resultsContainer);
     }
-   
+}
