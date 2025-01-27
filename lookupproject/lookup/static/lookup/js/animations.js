@@ -7,8 +7,6 @@
  */
 export function fadeAndSlideOut(elements) {
     elements.forEach(element => {
-        const elementHeight = element.offsetHeight + 'px';
-        element.style.setProperty('--element-height', elementHeight);
         element.style.animationPlayState = 'running';
         element.addEventListener('animationend', () => {
             element.remove();

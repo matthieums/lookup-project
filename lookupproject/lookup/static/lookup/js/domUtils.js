@@ -112,8 +112,6 @@ export function formatResultsAsTable(data) {
     export function displayLoadingSpinner(isLoading, container) {
         const spinner = document.getElementById('spinner');
         if (isLoading) {
-            // container fade out
-
             displaySpinner(container, spinner);
         } else {
             // container fade in

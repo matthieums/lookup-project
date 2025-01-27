@@ -30,32 +30,27 @@ input, select, textarea {
 @keyframes hide {
     0% {
         opacity: 1;
-        height: var(--element-height);
+        max-height: 1000px;
+
     }
 
-    75% {
+    25% {
         opacity: 0;
-        height: var(--element-height);
+        max-height: 1000px;
+
     }
 
     100% {
         opacity: 0;
-        height: 0;
+        max-height: 0;
     }
 }
 
 .titles-container {
     animation-name: hide;
-    animation-duration: 1s;
+    animation-duration: 0.8s;
     animation-fill-mode: forwards;
     animation-play-state: paused;
+    overflow: hidden;
 }
-
-.fade-slide-container {
-    transition: opacity 0.5s ease, height 0.5s ease, margin 0.5s ease, padding 0.5s ease;
-    opacity: 1;
-    height: auto;
-    overflow: hidden; /* Ensures smooth collapsing when height shrinks */
-  }
-  
 
