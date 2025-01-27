@@ -5,20 +5,21 @@ Lookup
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid">
+<div class="container-md align-items-center">
     
-    <div class="title-container row">
-        <div class="col-12">
-            <h2>Looking for your next class?</h2>
+    <div class="title-container row my-3">
+        <div class="col-12 text-center">
+            <h2>Ready your next class?</h2>
+            <h3>Check our recently added courses and find your next course</h3>
         </div>
     </div>
 
     <div class="browse-container">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12">
                 <h2>For those who already know what they are looking for</h2>
             </div>
-            <div class="row">
+            <div class="row d-flex justify-content-center">
                 <div class="col-md-3 col-sm-4">
                     <select class="form-select" id="discipline-select" aria-label="discipline">
                         <option value="" selected>Discipline</option>
@@ -56,8 +57,8 @@ Lookup
     </div>
 
 
-    <div class="row search-container d-flex justify-content-center">
-        <div class="col-12">
+    <div class="row search-container justify-content-center">
+        <div class="col-sm-12 col-md-8">
             <div class="search-bar-container"></div>
         </div>
     </div>
@@ -68,11 +69,13 @@ Lookup
         </div>
     </div>
 
-    <div class="results-container"></div>
+    <div class="d-flex row justify-content-center">
+        <div class="col-sm-12 col-lg-8 results-container"></div>
+    </div>
 
 
     <div class="submit-course-container">
-        <h2>Do you provide courses?</h2>
+        <h2>Do you want to be part of our program?</h2>
         <a href="/contact">Submit a course</a>
     </div>
 

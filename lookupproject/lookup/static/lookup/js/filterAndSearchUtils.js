@@ -38,10 +38,12 @@ export function setUpDynamicFilters(params, path) {
     const resultsContainer = document.querySelector('.results-container')
     let timeout;
 
-    appendSearchBar()
-
     formSelects.forEach((selectForm) => {
         selectForm.addEventListener('change', (event) => {
+            if (!document.querySelector('.search-bar')) {
+                appendSearchBar()
+            }
+
             displayLoadingSpinner(true, resultsContainer)       
             const value = event.target.value;
             const selectType = selectForm.getAttribute('aria-label');
