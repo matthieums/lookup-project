@@ -51,9 +51,9 @@ export function formatResultsAsTable(data) {
     const tableBody = document.querySelector('.table-body')
     tableBody.innerHTML = ''
 
-    data.forEach(({ id, name, students, place, schedule }) => {
+    data.forEach(({ id, name, students, place, schedule, capacity }) => {
         const row = document.createElement('tr');
-        let studentCount = students.length;
+        let studentCount = `${students.length} / ${capacity}`;
         [name, students, place, schedule].forEach((value) => {
             const cell = document.createElement('td');
             if (value === students) {
