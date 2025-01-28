@@ -31,16 +31,19 @@ export async function fetchAndRender(url, path) {
 
 // Renders data and adds a search bar
 function renderResults(data, path) {
-    const resultsContainer = document.querySelector('.results-container')
-
-    if (path === CONFIG.paths.indexView) {
-        formatResultsAsCards(data)
-    } else if (path === CONFIG.paths.myCoursesView) {
-        formatResultsAsTable(data)
-    } else if (path === CONFIG.paths.teachersView) {
-        formatResultsAsStrings(data)
-    } else if (path === CONFIG.paths.schoolsView) {
-        formatResultsAsStrings(data)
+    if (data.length == 0) {
+        const resultsContainer = document.querySelector('.results-container')
+        resultsContainer.innerHTML = 'No results found'
+    } else {
+        if (path === CONFIG.paths.indexView) {
+            formatResultsAsCards(data)
+        } else if (path === CONFIG.paths.myCoursesView) {
+            formatResultsAsTable(data)
+        } else if (path === CONFIG.paths.teachersView) {
+            formatResultsAsStrings(data)
+        } else if (path === CONFIG.paths.schoolsView) {
+            formatResultsAsStrings(data)
+        }
     }
 }
 
