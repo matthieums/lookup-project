@@ -1,6 +1,7 @@
 import { fetchAndRender } from "./fetchUtils.js";
-import { displayLoadingSpinner, hideUnnecessaryContainers } from "./domUtils.js";
+import { hideUnnecessaryContainers } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
+import { displayLoadingSpinner } from "./animations.js";
 
 /**
  * Initializes parameters for the filters.
@@ -40,12 +41,12 @@ export function setUpDynamicFilters(params, path) {
 
     formSelects.forEach((selectForm) => {
         selectForm.addEventListener('change', (event) => {
+            displayLoadingSpinner(true, resultsContainer)
             if (!document.querySelector('.search-bar')) {
                 appendSearchBar();
                 hideUnnecessaryContainers(path);
             }
 
-            displayLoadingSpinner(true, resultsContainer)       
             const value = event.target.value;
             const selectType = selectForm.getAttribute('aria-label');
             params[selectType] = value ? value : null;
@@ -88,7 +89,6 @@ function narrowResults(searchQuery) {
     const resultsContainer = document.querySelector('.results-container')
     const allResults = document.querySelectorAll('.result')
     const normalizedQuery = searchQuery.toLowerCase()
-    displayLoadingDataSymbol(resultsContainer);
 
     allResults.forEach(result => {
         let resultData;

@@ -3,6 +3,7 @@ import { CONFIG } from './config.js';
 import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender } from './fetchUtils.js';
+import { displayLoadingSpinner } from './animations.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;

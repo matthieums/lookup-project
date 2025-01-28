@@ -27,14 +27,14 @@ input, select, textarea {
 
 
 /* Hiding containers using a smooth slide */
-@keyframes hide {
+@keyframes fade-out {
     0% {
         opacity: 1;
         max-height: 1000px;
 
     }
 
-    25% {
+    50% {
         opacity: 0;
         max-height: 1000px;
 
@@ -46,8 +46,27 @@ input, select, textarea {
     }
 }
 
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    25% {
+        opacity: 0;
+        max-height: 1000px;
+
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 1000px;
+    }
+}
+
+
 .titles-container {
-    animation-name: hide;
+    animation-name: none;
     animation-duration: 0.8s;
     animation-fill-mode: forwards;
     animation-play-state: paused;

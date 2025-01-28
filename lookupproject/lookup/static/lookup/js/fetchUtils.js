@@ -1,7 +1,7 @@
-import { displayLoadingSpinner, formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable, hideUnnecessaryContainers } from './domUtils.js';
+import { formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
-
+import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
     // TO-DO
     // Refactor the fetchanddisplaynearbyschool function and merge it with the 
     // fetchAndRender function
@@ -18,14 +18,14 @@ export async function fetchAndRender(url, path) {
         const response = await fetch(url);
 
         if (!response.ok) {
-            displayLoadingSpinner(false, resultsContainer);
             throw new Error('Error fetching data');
         }
         const data = await response.json();
         renderResults(data, path); 
     } catch (error) {
-        displayLoadingSpinner(false, resultsContainer);
         console.error('Error:', error);
+    } finally {
+        displayLoadingSpinner(false, resultsContainer)
     }
 }
 
@@ -42,14 +42,14 @@ function renderResults(data, path) {
     } else if (path === CONFIG.paths.schoolsView) {
         formatResultsAsStrings(data)
     }
-    displayLoadingSpinner(false, resultsContainer);
 }
 
 export async function fetchAndDisplayNearbySchools(params) {
     const resultsContainer = document.querySelector('.results-container');
-    
+    const featuredContainer = document.querySelector('.featured-container')
+    displayLoadingSpinner(true, featuredContainer);
+
     try {
-        displayLoadingSpinner(true, resultsContainer)
         const response = await fetch('/geoschool', {
             method: 'POST',
             headers: { 
@@ -75,11 +75,11 @@ export async function fetchAndDisplayNearbySchools(params) {
                 content += `<div>${school.name}</div>`;
             });
             resultsContainer.innerHTML = content;
+            fadeAndSlideIn(resultsContainer);
         }
     } catch (error) {
         console.error('Error:', error);
         resultsContainer.innerHTML = 'AN ERROR HAS OCCURRED';
-    } finally {
-        displayLoadingSpinner(false, resultsContainer);
     }
+    displayLoadingSpinner(false, featuredContainer)
 }

@@ -7,7 +7,7 @@ export function hideUnnecessaryContainers(path) {
     if (path === CONFIG.paths.indexView) {
         const submitCourseContainer = document.querySelector('.submit-course-container');
         const titlesContainer = document.querySelector('.titles-container')
-        containersToHide.push(submitCourseContainer,titlesContainer);
+        containersToHide.push(submitCourseContainer, titlesContainer);
     } else if (path === CONFIG.paths.teachersView) {
         const teacherContainer = document.querySelector('.teacher-container')
         containersToHide.push(teacherContainer)
@@ -74,58 +74,32 @@ export function formatResultsAsTable(data) {
 }
 
 
-    // Allows for the creation of cards with appropriate data.
-    // I add the result class so it can be manipulated dynamically
-    function courseCardFactory(header, title, text, footer) {
-        const card = document.createElement('div');
-        card.classList.add('card', 'text-center', 'm-4', 'result');
+// Allows for the creation of cards with appropriate data.
+// I add the result class so it can be manipulated dynamically
+function courseCardFactory(header, title, text, footer) {
+    const card = document.createElement('div');
+    card.classList.add('card', 'text-center', 'm-4', 'result');
 
-        const cardHeader = document.createElement('div');
-        cardHeader.classList.add('card-header');
-        cardHeader.textContent = header;
+    const cardHeader = document.createElement('div');
+    cardHeader.classList.add('card-header');
+    cardHeader.textContent = header;
 
-        const cardBody = document.createElement('div');
-        cardBody.classList.add('card-body');
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
 
-        const cardTitle = document.createElement('h5');
-        cardTitle.classList.add('card-title');
-        cardTitle.textContent = title;
+    const cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+    cardTitle.textContent = title;
 
-        const cardText = document.createElement('card-text');
-        cardText.classList.add('card-text');
-        cardText.textContent = text;
+    const cardText = document.createElement('card-text');
+    cardText.classList.add('card-text');
+    cardText.textContent = text;
 
-        const cardFooter = document.createElement('div');
-        cardFooter.classList.add('card-footer', 'text-body-secondary');
-        cardFooter.textContent = footer
+    const cardFooter = document.createElement('div');
+    cardFooter.classList.add('card-footer', 'text-body-secondary');
+    cardFooter.textContent = footer
 
-        card.append(cardHeader, cardBody, cardTitle, cardText, cardFooter);
+    card.append(cardHeader, cardBody, cardTitle, cardText, cardFooter);
 
-        return card
-    }
-
-/**
- * Shows or hides the loading indicator.
- * @param {Element} container - The container where the data is displayed.
- * @param {boolean} isLoading - Whether to show the loading symbol (true) or the data (false).
- */
-    export function displayLoadingSpinner(isLoading, container) {
-        const spinner = document.getElementById('spinner');
-        if (isLoading) {
-            displaySpinner(container, spinner);
-        } else {
-            // container fade in
-
-            hideSpinner(container, spinner);
-        }
-    }
-
-    function displaySpinner(container, spinner) {
-        container.classList.add('d-none');
-        spinner.classList.remove('d-none');
-    }
-
-    function hideSpinner(container,spinner) {
-        spinner.classList.add('d-none');        
-        container.classList.remove('d-none');
-    }
+    return card
+}
