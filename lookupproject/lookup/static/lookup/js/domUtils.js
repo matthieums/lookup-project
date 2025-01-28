@@ -51,6 +51,9 @@ export function formatResultsAsTable(data) {
     const tableBody = document.querySelector('.table-body')
     tableBody.innerHTML = ''
 
+    const totalCourses = document.querySelector('.courses-total')
+    totalCourses.innerHTML = `Total: ${data.length} courses`
+
     data.forEach(({ id, name, students, place, schedule, capacity }) => {
         const row = document.createElement('tr');
         let studentCount = `${students.length} / ${capacity}`;
