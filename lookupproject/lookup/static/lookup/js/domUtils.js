@@ -36,13 +36,18 @@ export function formatResultsAsCards(data) {
     cardGroup.classList.add('card-group');
 
     data.forEach((object) => {
+        const id = object.id;
         const header = object.name;
         const title = object.teacher;
         const text = object.description;
         const footer = object.target_audience;
         const imageUrl = object.illustration;
 
-        const card = courseCardFactory(header, title, text, footer,  imageUrl);
+        const card = courseCardFactory(id, header, title, text, footer,  imageUrl);
+
+        card.addEventListener('click', (event) => {
+            window.location.href = `${CONFIG.paths.course}/${event.currentTarget.id}`;
+        })
 
         const cardCol = document.createElement('div');
         cardCol.classList.add('col-md-4');
@@ -85,9 +90,10 @@ export function formatResultsAsTable(data) {
 
 // Allows for the creation of cards with appropriate data.
 // I add the result class so it can be manipulated dynamically
-function courseCardFactory(header, title, text, footer, imageUrl) {
+function courseCardFactory(id, header, title, text, footer, imageUrl) {
     const card = document.createElement('div');
     card.classList.add('card', 'text-center', 'm-2', 'result', 'shadow-sm', 'card-clickable');
+    card.id = id
 
     const cardHeader = document.createElement('div');
     cardHeader.classList.add('card-header');

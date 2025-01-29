@@ -1,6 +1,7 @@
 export const CONFIG = {
     paths: {
         indexView: '/',
+        course: '/course',
         teachersView: '/teachers',
         newSchoolView: '/new_school',
         schoolsView: '/schools',
