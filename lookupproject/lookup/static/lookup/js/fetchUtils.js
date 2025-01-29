@@ -14,6 +14,7 @@ import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
  */
 export async function fetchAndRender(url, path) {
     const resultsContainer = document.querySelector('.results-container')
+    displayLoadingSpinner(true, resultsContainer)
     try {
         const response = await fetch(url);
 
@@ -31,8 +32,9 @@ export async function fetchAndRender(url, path) {
 
 // Renders data and adds a search bar
 function renderResults(data, path) {
+    const resultsContainer = document.querySelector('.results-container')
+
     if (data.length == 0) {
-        const resultsContainer = document.querySelector('.results-container')
         resultsContainer.innerHTML = 'No results found'
     } else {
         if (path === CONFIG.paths.indexView) {

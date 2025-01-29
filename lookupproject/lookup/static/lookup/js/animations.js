@@ -29,7 +29,7 @@ function displaySpinner(container) {
 function hideSpinner(container) {
     const spinner = document.getElementById('spinner')
     spinner.classList.add('d-none')
-    container.classList.remove('d-none')
+    fadeAndSlideIn(container)
 }
 
 export function fadeAndSlideOut(elements) {
@@ -37,7 +37,7 @@ export function fadeAndSlideOut(elements) {
 
     elementsArray.forEach(element => {
         element.style.animationName = 'fade-out';
-        element.style.animationDuration = '1s';
+        element.style.animationDuration = '0.5s';
         element.style.animationTimingFunction = 'ease';
         element.style.animationIterationCount = '1'; 
         element.style.animationPlayState = 'running';        
@@ -54,6 +54,9 @@ export function fadeAndSlideIn(elements) {
 
     elementsArray.forEach(element => {
         element.style.animationName = 'fade-in';
+        element.style.animationDuration = '1s';
+        element.style.animationTimingFunction = 'ease';
+        element.style.animationIterationCount = '1'; 
         element.style.animationPlayState = 'running';
         element.classList.remove('d-none')
         element.addEventListener('animationend', () => {
@@ -61,4 +64,3 @@ export function fadeAndSlideIn(elements) {
         }, { once: true });
     })
 }
-

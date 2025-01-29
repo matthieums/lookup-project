@@ -65,11 +65,3 @@ input, select, textarea {
 }
 
 
-.titles-container {
-    animation-name: none;
-    animation-duration: 0.8s;
-    animation-fill-mode: forwards;
-    animation-play-state: paused;
-    overflow: hidden;
-}
-

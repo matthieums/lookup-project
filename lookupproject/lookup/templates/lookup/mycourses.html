@@ -16,11 +16,14 @@ MyCourses
         </div>
 
         <div class="row">
-            <div class="col-12  courses-total"></div>
+            <div class="col-12 courses-total">Total: </div>
         </div>
 
-        <div class="results-container px-4">
-            <table class="table table-hover">
+        <div class="d-flex row justify-content-center results-container px-4">
+            <div class="spinner-border" role="status" id="spinner">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <table class="table table-hover d-none">
                 <thead>
                 <tr>
                     <th scope="col">Name</th>

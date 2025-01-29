@@ -49,6 +49,7 @@ export function formatResultsAsCards(data) {
 export function formatResultsAsTable(data) {
     // TO-DO: Make more reusable. This function is only usable on one type of data. 
     const tableBody = document.querySelector('.table-body')
+    const table = document.querySelector('.table')
     tableBody.innerHTML = ''
 
     const totalCourses = document.querySelector('.courses-total')
@@ -71,7 +72,7 @@ export function formatResultsAsTable(data) {
         row.addEventListener('click', () => {
             window.location.href = `course/${id}`;
         })
-
+        table.classList.remove('d-none')
     })
 }
 

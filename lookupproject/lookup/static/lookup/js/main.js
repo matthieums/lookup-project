@@ -3,7 +3,7 @@ import { CONFIG } from './config.js';
 import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender } from './fetchUtils.js';
-import { displayLoadingSpinner } from './animations.js';
+import { fadeAndSlideIn } from './animations.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
@@ -32,12 +32,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                     locationInput.value = address;
                     latitudeInput.value = latitude;
                     longitudeInput.value = longitude;
-                    console.log(`${coordinates}`);                }
+                    console.log(`${coordinates}`);                
+                }
             });
 
     } else if (currentPath === CONFIG.paths.myCoursesView) {
-        // fetch courses using user id and return all courses created with this id
-        // Display courses created by user
         const id = document.querySelector('.user-id').innerHTML
         const url = `courses/get?${encodeURIComponent('created_by')}=${encodeURIComponent(id)}`
         fetchAndRender(url, currentPath)
