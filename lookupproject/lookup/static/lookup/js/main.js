@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const params = await initializeParams();
         fetchAndDisplayClosestCityName(params);
         setUpDynamicFilters(params, currentPath);
-        fetchAndDisplayNearbySchools(params);
 
     } else if (currentPath === CONFIG.paths.newSchoolView) {
         const autoCompleteContainer = document.getElementById("autocomplete");

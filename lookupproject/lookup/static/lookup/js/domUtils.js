@@ -32,18 +32,25 @@ export function formatResultsAsCards(data) {
     const resultsContainer = document.querySelector('.results-container');
     resultsContainer.innerHTML = '';
 
-    data.forEach((object) => {
-        const card = document.createElement('div');
+    const cardGroup = document.createElement('div');
+    cardGroup.classList.add('card-group');
 
+    data.forEach((object) => {
         const header = object.name;
         const title = object.teacher;
         const text = object.description;
         const footer = object.target_audience;
+        const imageUrl = object.illustration;
 
-        const cardBody = courseCardFactory(header, title, text, footer);
-        card.appendChild(cardBody);
-        resultsContainer.append(cardBody);
+        const card = courseCardFactory(header, title, text, footer,  imageUrl);
+
+        const cardCol = document.createElement('div');
+        cardCol.classList.add('col-md-4');
+        cardCol.appendChild(card);
+
+        cardGroup.appendChild(cardCol);
     })
+    resultsContainer.appendChild(cardGroup);
 }
 
 export function formatResultsAsTable(data) {
@@ -79,9 +86,9 @@ export function formatResultsAsTable(data) {
 
 // Allows for the creation of cards with appropriate data.
 // I add the result class so it can be manipulated dynamically
-function courseCardFactory(header, title, text, footer) {
+function courseCardFactory(header, title, text, footer, imageUrl) {
     const card = document.createElement('div');
-    card.classList.add('card', 'text-center', 'm-4', 'result');
+    card.classList.add('card', 'text-center', 'm-2', 'result');
 
     const cardHeader = document.createElement('div');
     cardHeader.classList.add('card-header');
@@ -94,15 +101,24 @@ function courseCardFactory(header, title, text, footer) {
     cardTitle.classList.add('card-title');
     cardTitle.textContent = title;
 
-    const cardText = document.createElement('card-text');
+    const cardText = document.createElement('p');
     cardText.classList.add('card-text');
     cardText.textContent = text;
 
     const cardFooter = document.createElement('div');
     cardFooter.classList.add('card-footer', 'text-body-secondary');
-    cardFooter.textContent = footer
+    cardFooter.textContent = footer;
 
-    card.append(cardHeader, cardBody, cardTitle, cardText, cardFooter);
+    const img = document.createElement('img');
+    img.classList.add('img-fluid', 'rounded-start');
+    img.src = imageUrl;
+    img.alt = title;
 
-    return card
+    card.appendChild(img);
+    card.appendChild(cardBody);
+    cardBody.append(cardTitle, cardText);
+    card.appendChild(cardFooter);
+
+    return card;
+
 }

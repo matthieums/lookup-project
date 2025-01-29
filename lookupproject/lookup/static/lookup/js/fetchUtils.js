@@ -91,6 +91,7 @@ export async function fetchAndDisplayNearbySchools(params) {
 
 
 export async function fetchAndDisplayClosestCityName(params) {
+    const closestCityContainer = document.getElementById('closest-city')
     var requestOptions = {
         method: 'GET',
       };
@@ -106,11 +107,11 @@ export async function fetchAndDisplayClosestCityName(params) {
         }
 
         const data = await response.json()
-        console.log(data)
         const city = data.features[0]?.properties?.city;
-        document.getElementById('closest-city').innerHTML = city
+        closestCityContainer.innerHTML = city
 
     } catch (error) {
         console.log(error)
+        closestCityContainer.innerHTML = "Location not found"
     }
 }
