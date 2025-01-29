@@ -137,7 +137,8 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "You were successfully logged in!")
-                return redirect(reverse('index'))
+                next_url = request.GET.get('next', reverse('index'))
+                return HttpResponseRedirect(next_url)
             else:
                 form.add_error(None, "Invalid username or password.")
     else:

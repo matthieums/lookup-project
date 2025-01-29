@@ -10,61 +10,63 @@
       <p>{{ course.description }}</p>
       <p>{{ course.id }}</p>
 
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
-        Cancel Course
-      </button>
+      {% if user.is_authenticated %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
+          Enroll
+        </button>
 
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
-      Enroll
-    </button>
-    
-    <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Do you want to enroll?</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <h2>A confirmation will be sent to {{user.email}}</h2>
-            <form action="/enroll/{{course.id}}" method="POST">
-              {% csrf_token %}
-              <div class="modal-footer">
-                <input type="submit" class="btn btn-primary" value="submit">
+        <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Do you want to enroll?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-            </form>
-
+              <div class="modal-body">
+                <h2>A confirmation will be sent to {{user.email}}</h2>
+                <form action="/enroll/{{course.id}}" method="POST">
+                  {% csrf_token %}
+                  <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="submit">
+                  </div>
+                </form>
+    
+              </div>
+    
+            </div>
           </div>
-
         </div>
-      </div>
-    </div>
 
-    {% if user.is_authenticated %}
+      {% else %}
+        <div>You must be authenticated to take part in this course</div>
+        <a href="{% url 'login' %}?next={{ request.path }}">Click here to login</a>
+
       {% if user.is_teacher %}
-      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to cancel this course?</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <h2>A mail will be sent to all who enrolled to this course</h2>
-              <p>We are sorry that you cannot provide the course anymore.
-              </p>
-              <form action="/delete/{{course.id}}" method="POST">
-                {% csrf_token %}
-                <div class="modal-footer">
-                  <input type="submit" class="btn btn-primary" value="delete">
-                </div>
-              </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+          Cancel Course
+        </button>
 
+  
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to cancel this course?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <h2>A mail will be sent to all who enrolled to this course</h2>
+                <p>We are sorry that you cannot provide the course anymore.</p>
+                <form action="/delete/{{course.id}}" method="POST">
+                  {% csrf_token %}
+                  <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="delete">
+                  </div>
+                </form>
+              </div>
             </div>
-
           </div>
         </div>
-      </div>
       {% endif %}
     {% endif %}
 
