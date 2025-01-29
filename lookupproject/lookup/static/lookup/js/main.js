@@ -5,7 +5,7 @@ import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js'
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
-
+    
     if (currentPath === CONFIG.paths.indexView) {
         const params = await initializeParams();
         fetchAndDisplayClosestCityName(params);

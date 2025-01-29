@@ -10,7 +10,6 @@ urlpatterns = [
      path("new_course", views.new_course, name="new_course"),
      path("new_school", views.new_school, name="new_school"),
      path("mycourses", views.my_courses, name="my_courses"),
-     path("success", views.success, name="success"),
 
      # Api dependant paths
      path("course/<int:course_id>", views.course, name="course"),

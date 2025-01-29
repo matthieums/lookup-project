@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from django.http import Http404, JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.gis.measure import D
@@ -110,12 +111,13 @@ def school_profile(request, school_id):
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect(reverse('index'))
 
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success('Registration successful')
             return redirect('login')
     else:
         form = NewUserForm()
@@ -134,7 +136,8 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                messages.success(request, "You were successfully logged in!")
+                return redirect(reverse('index'))
             else:
                 form.add_error(None, "Invalid username or password.")
     else:
@@ -162,7 +165,8 @@ def new_course(request):
         if form.is_valid():
             form.instance.created_by = request.user
             form.save()
-            return redirect(reverse(("success")))
+            messages.success(request, "Course successfully added!")
+            return redirect(reverse(("index")))
 
     form = CourseForm()
 
@@ -178,6 +182,7 @@ def new_school(request):
         form = SchoolForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "School successfully added")
             return redirect(reverse(('success')))
     else:
         form = SchoolForm()
@@ -189,10 +194,6 @@ def new_school(request):
 
 def about(request):
     return render(request, "lookup/about.html")
-
-
-def success(request):
-    return render(request, 'lookup/success.html')
 
 
 def delete_course(request, course_id):
@@ -223,8 +224,9 @@ def delete_course(request, course_id):
             mails.append(mail)
         course.delete()
         send_mass_mail((mail for mail in mails), fail_silently=False)
+        messages.success('Course was deleted successfully')
 
-    return HttpResponseRedirect(reverse('success'))
+    return HttpResponseRedirect(reverse('index'))
 
 
 @login_required
