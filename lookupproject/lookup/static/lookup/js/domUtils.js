@@ -5,11 +5,12 @@ export function hideUnnecessaryContainers(path) {
     let containersToHide = [];
     
     if (path === CONFIG.paths.indexView) {
-        const titlesContainer = document.querySelector('.titles-container')
-        containersToHide.push(titlesContainer);
+        const titlesContainer = document.querySelector('.titles-container');
+        const featuredContainer = document.querySelector('.featured-container');
+        containersToHide.push(titlesContainer, featuredContainer);
     } else if (path === CONFIG.paths.teachersView) {
-        const teacherContainer = document.querySelector('.teacher-container')
-        containersToHide.push(teacherContainer)
+        const teacherContainer = document.querySelector('.teacher-container');
+        containersToHide.push(teacherContainer);
     }
     fadeAndSlideOut(containersToHide);
 }
@@ -26,7 +27,6 @@ export function formatResultsAsStrings(data) {
         resultsContainer.append(container)
     })
 }
-
 
 export function formatResultsAsCards(data) {
     const resultsContainer = document.querySelector('.results-container');
@@ -83,12 +83,11 @@ export function formatResultsAsTable(data) {
     })
 }
 
-
 // Allows for the creation of cards with appropriate data.
 // I add the result class so it can be manipulated dynamically
 function courseCardFactory(header, title, text, footer, imageUrl) {
     const card = document.createElement('div');
-    card.classList.add('card', 'text-center', 'm-2', 'result');
+    card.classList.add('card', 'text-center', 'm-2', 'result', 'shadow-sm', 'card-clickable');
 
     const cardHeader = document.createElement('div');
     cardHeader.classList.add('card-header');

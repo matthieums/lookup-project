@@ -1,6 +1,5 @@
 import { initializeParams } from './filterAndSearchUtils.js';
 import { CONFIG } from './config.js';
-import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js';
 

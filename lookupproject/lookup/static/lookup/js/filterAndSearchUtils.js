@@ -25,9 +25,6 @@ export async function initializeParams() {
 }
 
 
-
-
-
 /**
  * Sets up dynamic filters by adding event listeners to form select elements.
  * When a user selects a new option, the corresponding parameter in the `params` object is updated.

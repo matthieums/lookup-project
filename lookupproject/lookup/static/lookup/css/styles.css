@@ -30,7 +30,18 @@ input, select, textarea {
     width: 30rem;
 }
 
-/* Hiding containers using a smooth slide */
+.card-clickable {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.card-clickable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
 @keyframes fade-out {
     0% {
         opacity: 1;
