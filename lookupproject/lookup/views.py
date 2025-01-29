@@ -131,13 +131,14 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('')
+                return redirect('/')
             else:
                 form.add_error(None, "Invalid username or password.")
     else:
         form = CustomLoginForm()
 
     return render(request, 'lookup/login.html', {'form': form})
+
 
 @login_required
 def my_courses(request):

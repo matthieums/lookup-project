@@ -14,34 +14,47 @@
 
         <body>
             <nav class="navbar bg-dark px-3" data-bs-theme="dark">
-
-                <a href="/" class="navbar-brand">Lookup</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <div class="container-fluid">
     
-                <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    <div class="offcanvas-header">
-                        <h2>Lookup</h2>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    
-                    <ul class="nav flex-column">
+                    <a href="/" class="navbar-brand">Lookup</a>
+                    <div class="d-flex ms-auto align-items-center">
                         {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/mycourses">MyCourses</a>
-                            </li>
+                            <span class="navbar-text text-light me-3">
+                                <a href="/mycourses">MyCourses</a>
+                            </span>
+            
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">Logout</button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn">Login</a>
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/teachers">Teachers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/schools">Schools</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link active" aria-current="page" href="/contact">Contact</a>
-                        </li>
-                    </ul>
+                    </div>
+                    <button class="d-flex navbar-toggler align-items-center justify-content-between" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span><span class="ms-2">Menu</span>
+                    </button>
+    
+                    <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <h2>Lookup</h2>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+    
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/teachers">Teachers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/schools">Schools</a>
+                            </li>
+                            <li class="nav-item"></li>
+                                <a class="nav-link active" aria-current="page" href="/contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
                 </div>
             </nav>
         

@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
@@ -32,6 +32,8 @@ urlpatterns = [
      # Authentication logic
      path("accounts/register", views.register, name="register"),
      path("accounts/login/", views.login_view, name="login"),
+     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 
      # API endpoints
      path("teachers/get", views.getTeacher, name="getTeacher"),
