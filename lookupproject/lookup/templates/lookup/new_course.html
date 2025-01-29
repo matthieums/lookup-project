@@ -1,0 +1,13 @@
+{% extends 'lookup/layout.html' %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block body %}
+    <h2>Create new course</h2>
+    <form action="/new_school" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+{% endblock %}

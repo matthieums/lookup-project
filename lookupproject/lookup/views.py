@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 
 from django.http import Http404, JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
@@ -17,7 +18,7 @@ from django.shortcuts import (
 )
 
 from .models import Course, School, CustomUser, STUDENT, TEACHER
-from .forms import CourseForm, SchoolForm, NewUserForm
+from .forms import CourseForm, SchoolForm, NewUserForm, CustomLoginForm
 from .serializers import (
     UserSerializer,
     CourseSerializer,
@@ -30,31 +31,11 @@ def index(request):
     return render(request, "lookup/index.html")
 
 
-def my_courses(request):
-    return render(request, 'lookup/mycourses.html', {
-        'user': request.user
-    })
-
-
-def register(request):
-    if request.method == 'POST':
-        form = NewUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = NewUserForm()
-
-    return render(request, 'lookup/register.html', {
-        'form': form
-    })
-
-
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
     course_creator = course.created_by
-    
+
     if request.method == 'GET':
         return render(request, 'lookup/course.html', {
             'course': course,
@@ -98,7 +79,7 @@ def course(request, course_id):
 
 def teachers(request):
     if request.method == 'GET':
-        teachers = CustomUser.objects.filter(role=TEACHER)
+        teachers = CustomUser.objects.filter(role=TEACHER).order_by('last_name')
 
         return render(request, "lookup/teachers.html", {
             'teachers': teachers
@@ -107,55 +88,10 @@ def teachers(request):
 
 def schools(request):
     if request.method == 'GET':
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('name')
         return render(request, "lookup/schools.html", {
             'schools': schools
         })
-
-
-@login_required
-def create_course(request):
-    if request.user.role != TEACHER:
-        return HttpResponseForbidden(
-            "Creating a course is restricted to teachers."
-            )
-
-    if request.method == 'POST':
-        form = CourseForm(request.POST)
-        if form.is_valid():
-            form.instance.created_by = request.user
-            form.save()
-            return redirect(reverse(("success")))
-    else:
-        form = CourseForm()
-
-    return render(request, "lookup/course_form.html", {
-        'form': form
-    })
-
-
-def about(request):
-    return render(request, "lookup/about.html")
-
-
-@login_required
-def create_school(request):
-    if request.user.is_student:
-        return HttpResponseForbidden(
-            "Creating a course is restricted to teachers."
-            )
-
-    if request.method == 'POST':
-        form = SchoolForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse(('success')))
-    else:
-        form = SchoolForm()
-
-    return render(request, "lookup/newschool.html", {
-        'form': form
-    })
 
 
 def teacher_profile(request, teacher_id):
@@ -170,6 +106,85 @@ def school_profile(request, school_id):
     return render(request, "lookup/school_profile.html", {
         'school': school
     })
+
+
+def register(request):
+    if request.method == 'POST':
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = NewUserForm()
+
+    return render(request, 'lookup/register.html', {
+        'form': form
+    })
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('')
+            else:
+                form.add_error(None, "Invalid username or password.")
+    else:
+        form = CustomLoginForm()
+
+    return render(request, 'lookup/login.html', {'form': form})
+
+@login_required
+def my_courses(request):
+    return render(request, 'lookup/mycourses.html', {
+        'user': request.user
+    })
+
+
+@login_required
+def new_course(request):
+    if request.user.role != TEACHER:
+        return HttpResponseForbidden(
+            "Creating a course is restricted to teachers."
+            )
+
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.instance.created_by = request.user
+            form.save()
+            return redirect(reverse(("success")))
+
+    form = CourseForm()
+
+    return render(request, "lookup/new_course.html", {
+        'form': form
+    })
+
+
+@login_required
+def new_school(request):
+
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse(('success')))
+    else:
+        form = SchoolForm()
+
+    return render(request, "lookup/new_school.html", {
+        'form': form
+    })
+
+
+def about(request):
+    return render(request, "lookup/about.html")
 
 
 def success(request):
@@ -207,10 +222,27 @@ def delete_course(request, course_id):
 
     return HttpResponseRedirect(reverse('success'))
 
-# API'S
+
+@login_required
+def participants(request, course_id):
+    user = request.user
+    course = get_object_or_404(Course, pk=course_id)
+    course_creator = course.created_by
+
+    if user.id != course_creator.id:
+        return HttpResponseForbidden(
+            'Only the creator of this course can access its participants list.'
+        )
+
+    return render(request, 'lookup/participants.html', {
+            'course': course
+        })
+
+
+############ API'S ############
 @api_view(['GET'])
 def getTeacher(request):
-    teachers = TeacherProfile.objects.all()
+    teachers = CustomUser.objects.filter(role=TEACHER)
     if not teachers.exists():
         raise Http404("No teachers found.")
 
@@ -269,8 +301,6 @@ def getSchool(request):
         return Response(serializer.data)
 
 
-# Later down the road, consider using django signals
-# To get and validate geographic coordinates
 @api_view(['POST'])
 def get_nearby_locations(request):
     try:
@@ -300,19 +330,3 @@ def get_nearby_locations(request):
         else:
             return Response({"error": "Unknown error"},
                             status=400)
-
-
-@login_required
-def participants(request, course_id):
-    user = request.user
-    course = get_object_or_404(Course, pk=course_id)
-    course_creator = course.created_by
-
-    if user.id != course_creator.id:
-        return HttpResponseForbidden(
-            'Only the creator of this course can access its participants list.'
-        )
-
-    return render(request, 'lookup/participants.html', {
-            'course': course
-        })

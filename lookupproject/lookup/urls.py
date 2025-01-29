@@ -7,15 +7,14 @@ urlpatterns = [
      path("about", views.about, name="about"),
      path("teachers", views.teachers, name="teachers"),
      path("schools", views.schools, name="schools"),
-     path("create_course", views.create_course, name="create_course"),
-     path("newschool", views.create_school, name="new_school"),
+     path("new_course", views.new_course, name="new_course"),
+     path("new_school", views.new_school, name="new_school"),
      path("mycourses", views.my_courses, name="my_courses"),
      path("success", views.success, name="success"),
 
      # Api dependant paths
      path("course/<int:course_id>", views.course, name="course"),
-     path(
-          "course/<int:course_id>/participants",
+     path("course/<int:course_id>/participants",
           views.participants,
           name="participants"
           ),
@@ -31,9 +30,8 @@ urlpatterns = [
 
 
      # Authentication logic
-     path("accounts/", include("django.contrib.auth.urls")),
      path("accounts/register", views.register, name="register"),
-     path("accounts/login/", auth_views.LoginView.as_view()),
+     path("accounts/login/", views.login_view, name="login"),
 
      # API endpoints
      path("teachers/get", views.getTeacher, name="getTeacher"),

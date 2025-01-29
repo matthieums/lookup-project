@@ -1,0 +1,56 @@
+{% extends 'lookup/layout.html' %}
+
+{% block title %}
+New school
+{% endblock %}
+
+{% block body %}
+<h2>Submit a new school</h2>
+
+<div class="row">
+<div class="col-lg-8 col-md-12">
+    
+        <form action="/new_school" method="post">
+            {% csrf_token %}
+
+            <div>
+                {{ form.name.label_tag }}
+                {{form.name}}
+            </div>
+            
+            <div>
+                <label for="autocomplete">Address:</label>
+                <div id="autocomplete" class="autocomplete-container"></div>
+            </div>
+
+            <div >
+                {{ form.contact.label_tag }}
+                {{form.contact}}
+            </div>
+
+            <div >
+                {{ form.website.label_tag }}
+                {{form.website}}
+            </div>
+    
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+    
+            <input id="submit-button" type="submit" value="OK">
+
+        </form>
+    
+
+        {% if form.errors %}
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    
+</div>
+</div>
+
+{% endblock %}

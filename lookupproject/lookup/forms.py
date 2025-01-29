@@ -1,13 +1,26 @@
 from django import forms
 from .models import Course, School, CustomUser, TEACHER, STUDENT
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+
+class CustomLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
 
 class NewUserForm(UserCreationForm):
     role = forms.ChoiceField(choices=[(STUDENT, 'Student'), (TEACHER, 'Teacher')])
+
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'role']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean_role(self):
         role = self.cleaned_data.get('role')
@@ -27,11 +40,13 @@ class CourseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['created_by'].widget = forms.HiddenInput()
-        
+
         for field_name, field in self.fields.items():
             field.widget.attrs['autocomplete'] = 'off'
-
-        
+            if field_name != 'online':
+                field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-check-input'
 
 
 class SchoolForm(forms.ModelForm):
@@ -48,3 +63,4 @@ class SchoolForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['autocomplete'] = 'off'
+            field.widget.attrs['class'] = 'form-control'

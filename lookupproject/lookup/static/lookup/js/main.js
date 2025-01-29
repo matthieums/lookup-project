@@ -3,7 +3,6 @@ import { CONFIG } from './config.js';
 import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender } from './fetchUtils.js';
-import { fadeAndSlideIn } from './animations.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
@@ -23,18 +22,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         const autoCompleteInput = new autocomplete.GeocoderAutocomplete(
             autoCompleteContainer, 
             CONFIG.apiKey, 
-            { /* Geocoder options */ });
+            {  filter: { country: "BE" }  });
             autoCompleteInput.on('select', (location) => {
                 if (location.properties) {
-                    console.log(location)
                     const address = location.properties.formatted;
-                    const coordinates = parseFloat(location.properties);
                     locationInput.value = address;
                     latitudeInput.value = latitude;
-                    longitudeInput.value = longitude;
-                    console.log(`${coordinates}`);                
+                    longitudeInput.value = longitude;          
                 }
             });
+            document.querySelector('.geoapify-close-button').classList.add('d-none')
+            document.querySelector('.geoapify-autocomplete-input').classList.add('form-control')
 
     } else if (currentPath === CONFIG.paths.myCoursesView) {
         const id = document.querySelector('.user-id').innerHTML
@@ -58,12 +56,5 @@ document.addEventListener('DOMContentLoaded', async function () {
             .from(content)
             .save();
         })
-    } else if (currentPath === CONFIG.paths.teachersView) {
-        const fetchUrl = ('/teachers/get')
-        fetchAndRender(fetchUrl, currentPath)
-        
-    } else if (currentPath === CONFIG.paths.schoolsView) {
-        const fetchUrl = ('schools/get')
-        fetchAndRender(fetchUrl, currentPath)
-    } 
+    }
 });

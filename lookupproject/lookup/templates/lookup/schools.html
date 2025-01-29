@@ -7,6 +7,10 @@ Schools
 {% block body %}
     <h2>Schools</h2>
     <div class="results-container">
+        {% for school in schools %}
+            <p>{{school.name}}</p>
+            <p>{{school.address}}</p>
+        {% endfor %}
 
     </div>
 {% endblock %}

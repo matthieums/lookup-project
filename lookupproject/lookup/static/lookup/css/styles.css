@@ -21,10 +21,14 @@ input, select, textarea {
     position: relative;
 }
 
+
 .course-row :hover {
     cursor: pointer;
 }
 
+.login-card {
+    width: 30rem;
+}
 
 /* Hiding containers using a smooth slide */
 @keyframes fade-out {
