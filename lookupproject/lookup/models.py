@@ -70,6 +70,10 @@ class School(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=80)
     description = models.TextField(max_length=800)
+    illustration = models.ImageField(
+        blank=True,
+        upload_to='images/',
+        default='default/default_image.jpg')
     created_by = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,

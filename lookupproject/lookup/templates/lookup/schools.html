@@ -8,7 +8,7 @@ Schools
     <h2>Schools</h2>
     <div class="results-container">
         {% for school in schools %}
-            <p>{{school.name}}</p>
+            <a href="{% url 'school_profile' school.id %}">{{school.name}}</a>
             <p>{{school.address}}</p>
         {% endfor %}
 

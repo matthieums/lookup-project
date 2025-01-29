@@ -109,6 +109,9 @@ def school_profile(request, school_id):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
