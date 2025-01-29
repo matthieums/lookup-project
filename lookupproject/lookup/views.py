@@ -70,7 +70,13 @@ def course(request, course_id):
                 [user.email]
             )
             send_mass_mail((message1, message2), fail_silently=False)
-            return HttpResponseRedirect(reverse('success'))
+            messages.success(
+                request,
+                f"You\'ve successfully registered to this course. A confirmation"
+                f"has been sent to {user.email}"
+                )
+
+            return HttpResponseRedirect(reverse('index'))
 
         except ObjectDoesNotExist:
             return JsonResponse({'error': 'Course not found.'}, status=404)
@@ -117,7 +123,7 @@ def register(request):
         form = NewUserForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success('Registration successful')
+            messages.success(request, 'Registration successful')
             return redirect('login')
     else:
         form = NewUserForm()
@@ -225,7 +231,7 @@ def delete_course(request, course_id):
             mails.append(mail)
         course.delete()
         send_mass_mail((mail for mail in mails), fail_silently=False)
-        messages.success('Course was deleted successfully')
+        messages.success(request, 'Course was deleted successfully')
 
     return HttpResponseRedirect(reverse('index'))
 

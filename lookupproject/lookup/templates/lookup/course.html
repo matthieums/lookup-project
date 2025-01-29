@@ -24,7 +24,7 @@
               </div>
               <div class="modal-body">
                 <h2>A confirmation will be sent to {{user.email}}</h2>
-                <form action="/enroll/{{course.id}}" method="POST">
+                <form action="{% url 'course' course.id %}" method="POST">
                   {% csrf_token %}
                   <div class="modal-footer">
                     <input type="submit" class="btn btn-primary" value="submit">
