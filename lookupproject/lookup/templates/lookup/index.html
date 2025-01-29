@@ -25,46 +25,50 @@ Lookup
             <div class="col-12 my-2">
             </div>
             <div class="row d-flex justify-content-center">
-                <div class="">
-                    <h3>filters</h3>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <select class="form-select" id="discipline-select" aria-label="discipline">
-                        <option value="" selected>Discipline</option>
-                        <option class="category" value="dance" >Dance</option>
-                        <option class="category" value="drama">Drama</option>
-                        <option class="category" value="music">Music</option>
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <!-- ATTENTION -->
-                     <!-- La majuscule à la valeur va être un problème en cas d'ajout de nouvelles données à la base de donnée -->
-                      <!-- Vérifier que les valeurs correspondent à ce qu'on retrouve dans les modèles -->
-                    <select class="form-select" id="age-group-select" aria-label="age_group">
-                        <option value="" selected>Age group</option>
-                        <option value="Children">Children</option>
-                        <option value="Adolescents">Adolescents</option>
-                        <option value="Adults">Adults</option>
-                        <option value="Elderly">Elderly</option>
-                        <option value="Anyone">Anyone</option>
+                <div class="col"><h3>Filters</h3></div>
+            </div>
+            <div class="row">
+              <div class="col-6 ms-auto"><p>Your location: <span id="closest-city"></span></p></div>
+            </div>
 
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <select class="form-select" id="radius-select" aria-label="radius">
-                        <option value="0" selected>Radius(km)</option>
-                        <option value="10000">&gt;10km</option>
-                        <option value="100000">&gt;50km</option>
-                    </select>
-                </div>
+              <div class="row">
+                  <div class="col-md-3 col-sm-4">
+                      <select class="form-select" id="discipline-select" aria-label="discipline">
+                          <option value="" selected>Discipline</option>
+                          <option class="category" value="dance" >Dance</option>
+                          <option class="category" value="drama">Drama</option>
+                          <option class="category" value="music">Music</option>
+                      </select>
+                  </div>
+                  <div class="col-md-3 col-sm-4">
+                      <!-- ATTENTION -->
+                       <!-- La majuscule à la valeur va être un problème en cas d'ajout de nouvelles données à la base de donnée -->
+                        <!-- Vérifier que les valeurs correspondent à ce qu'on retrouve dans les modèles -->
+                      <select class="form-select" id="age-group-select" aria-label="age_group">
+                          <option value="" selected>Age group</option>
+                          <option value="Children">Children</option>
+                          <option value="Adolescents">Adolescents</option>
+                          <option value="Adults">Adults</option>
+                          <option value="Elderly">Elderly</option>
+                          <option value="Anyone">Anyone</option>
+  
+                      </select>
+                  </div>
+                  <div class="col-md-3 col-sm-4">
+                      <select class="form-select" id="radius-select" aria-label="radius">
+                          <option value="0" selected>Radius(km)</option>
+                          <option value="10000">&gt;10km</option>
+                          <option value="100000">&gt;50km</option>
+                      </select>
+                  </div>
+  
             </div>
         </div>
         <div class="row search-container justify-content-center">
             <div class="search-bar-container col-sm-8 col-md-8">
             </div>
         </div>
-    </div>
-
+        </div>
 
     <div class="featured-container">
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">

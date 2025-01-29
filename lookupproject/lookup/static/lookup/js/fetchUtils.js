@@ -88,3 +88,29 @@ export async function fetchAndDisplayNearbySchools(params) {
     }
     displayLoadingSpinner(false, featuredContainer)
 }
+
+
+export async function fetchAndDisplayClosestCityName(params) {
+    var requestOptions = {
+        method: 'GET',
+      };
+
+    const lat = params.user_lat
+    const lon = params.user_lon
+
+    try {
+        const response = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${CONFIG.apiKey}`, requestOptions)
+        
+        if (!response.ok) {
+            console.error('Reverse Geogoder fetch returned an error')
+        }
+
+        const data = await response.json()
+        console.log(data)
+        const city = data.features[0]?.properties?.city;
+        document.getElementById('closest-city').innerHTML = city
+
+    } catch (error) {
+        console.log(error)
+    }
+}

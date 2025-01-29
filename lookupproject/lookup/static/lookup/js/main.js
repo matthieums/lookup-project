@@ -2,14 +2,14 @@ import { initializeParams } from './filterAndSearchUtils.js';
 import { CONFIG } from './config.js';
 import { fetchAndDisplayNearbySchools } from './fetchUtils.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
-import { fetchAndRender } from './fetchUtils.js';
+import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
 
     if (currentPath === CONFIG.paths.indexView) {
         const params = await initializeParams();
-
+        fetchAndDisplayClosestCityName(params);
         setUpDynamicFilters(params, currentPath);
         fetchAndDisplayNearbySchools(params);
 

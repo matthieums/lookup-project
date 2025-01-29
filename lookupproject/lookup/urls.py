@@ -28,12 +28,10 @@ urlpatterns = [
           ),
      path("delete/<int:course_id>", views.delete_course, name="delete_course"),
 
-
      # Authentication logic
      path("accounts/register", views.register, name="register"),
      path("accounts/login/", views.login_view, name="login"),
      path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
-
 
      # API endpoints
      path("teachers/get", views.getTeacher, name="getTeacher"),
