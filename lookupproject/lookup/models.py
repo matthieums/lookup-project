@@ -73,7 +73,8 @@ class Course(models.Model):
     illustration = models.ImageField(
         blank=True,
         upload_to='images/',
-        default='default/default_image.jpg')
+        default='default/default_image.jpg'
+        )
     created_by = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,

@@ -5,15 +5,54 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container">
-      <h2>{{ course.name}}</h2>
-      <p>{{ course.description }}</p>
-      <p>{{ course.id }}</p>
+  <div class="container mt-2">
+
+    <div class="row my-4 d-flex flex-column flex-md-row">
+      
+      <div class="col-md-4 col-sm-6">
+        <img src="{{ MEDIA_URL }}default/default_image.jpg" class="img-fluid rounded-start" alt="default image">
+      </div>
+
+      <div class="col-md-4 col-sm6">
+        <div class="row">
+          <h2>{{ course.name}}</h2> <h4>w/ <a href="{% url 'teacher_profile' course.created_by.id %}">{{course.created_by}}</a></h4>
+        </div>
+        <div class="row">
+          <small>Date: {{course.schedule}}</small>
+        </div>
+        <div class="row mb-2">
+          <small>Location: {{course.place}}</small>
+        </div>
+        <div class="row">
+              <p>{{ course.description }}</p>
+        </div>
+        <div class="row">
+          <p>Who can register for this class? <br> {{ course.target_audience }}</p>
+    </div>
+      </div>
+
+    </div>
+
+    <p hidden>{{ course.id }}</p>
+
 
       {% if user.is_authenticated %}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
-          Enroll
-        </button>
+      
+        <div class="row">
+          <div class="col-auto">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
+              Enroll
+            </button>
+          </div>
+
+        {% if user.is_teacher %}
+          <div class="col-auto">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+              Cancel Course
+            </button>
+          </div>
+        {% endif %}
+        </div>
 
         <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -36,13 +75,9 @@
             </div>
           </div>
         </div>
+        
 
-      {% if user.is_teacher %}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
-          Cancel Course
-        </button>
-
-  
+        {% if user.is_teacher %}
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -64,11 +99,9 @@
           </div>
         </div>
       {% endif %}
-
       {% else %}
         <div>You must be authenticated to take part in this course</div>
         <a href="{% url 'login' %}?next={{ request.path }}">Click here to login</a>
-
     {% endif %}
 
   </div>
