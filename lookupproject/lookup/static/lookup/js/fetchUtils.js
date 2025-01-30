@@ -1,7 +1,8 @@
 import { formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
-import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
+import { displayLoadingSpinner, fadeAndSlideIn, fadeAndSlideOut } from './animations.js';
+import { displayResultsCount } from './filterAndSearchUtils.js';
     // TO-DO
     // Refactor the fetchanddisplaynearbyschool function and merge it with the 
     // fetchAndRender function
@@ -13,8 +14,10 @@ import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
  * @param {string} path - The path where the results will be rendered.
  */
 export async function fetchAndRender(url, path) {
-    const resultsContainer = document.querySelector('.results-container')
-    displayLoadingSpinner(true, resultsContainer)
+    const resultsContainer = document.querySelector('.results-container');
+
+    displayLoadingSpinner(true, resultsContainer);
+    
     try {
         const response = await fetch(url);
 
@@ -22,30 +25,25 @@ export async function fetchAndRender(url, path) {
             throw new Error('Error fetching data');
         }
         const data = await response.json();
-        renderResults(data, path); 
+        renderResults(data, path);
     } catch (error) {
         console.error('Error:', error);
     } finally {
-        displayLoadingSpinner(false, resultsContainer)
+        displayLoadingSpinner(false, resultsContainer);
     }
 }
 
 // Renders data and adds a search bar
 function renderResults(data, path) {
-    const resultsContainer = document.querySelector('.results-container')
-
-    if (data.length == 0) {
-        resultsContainer.innerHTML = 'No results found'
-    } else {
-        if (path === CONFIG.paths.indexView) {
-            formatResultsAsCards(data)
-        } else if (path === CONFIG.paths.myCoursesView) {
-            formatResultsAsTable(data)
-        } else if (path === CONFIG.paths.teachersView) {
-            formatResultsAsStrings(data)
-        } else if (path === CONFIG.paths.schoolsView) {
-            formatResultsAsStrings(data)
-        }
+    if (path === CONFIG.paths.indexView) {
+        displayResultsCount(data);
+        formatResultsAsCards(data);
+    } else if (path === CONFIG.paths.myCoursesView) {
+        formatResultsAsTable(data);
+    } else if (path === CONFIG.paths.teachersView) {
+        formatResultsAsStrings(data);
+    } else if (path === CONFIG.paths.schoolsView) {
+        formatResultsAsStrings(data);
     }
 }
 

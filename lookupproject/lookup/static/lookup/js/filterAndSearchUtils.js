@@ -1,7 +1,7 @@
 import { fetchAndRender } from "./fetchUtils.js";
 import { hideUnnecessaryContainers } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
-import { displayLoadingSpinner } from "./animations.js";
+import { displayLoadingSpinner, fadeAndSlideIn, fadeAndSlideOut } from "./animations.js";
 
 /**
  * Initializes parameters for the filters.
@@ -86,9 +86,10 @@ export function searchBarFactory() {
 
 
 function narrowResults(searchQuery) {
-    const resultsContainer = document.querySelector('.results-container')
     const allResults = document.querySelectorAll('.result')
     const normalizedQuery = searchQuery.toLowerCase()
+    const resultsCountContainer = document.getElementById('results-count');
+    let count = parseInt(resultsCountContainer.innerHTML)
 
     allResults.forEach(result => {
         let resultData;
@@ -100,9 +101,15 @@ function narrowResults(searchQuery) {
         }
 
         if (!resultData.toLowerCase().startsWith(normalizedQuery)) {
-            result.classList.add('d-none')
+            result.classList.add('d-none');
+            if (count > 0) {
+                count -= 1;
+            }
+            resultsCountContainer.innerHTML = count;
         } else {
-            result.classList.remove('d-none')
+            result.classList.remove('d-none');
+            count += 1;
+            resultsCountContainer.innerHTML = count;
         }
     })
 }
@@ -121,4 +128,18 @@ function appendSearchBar() {
     const searchBarContainer = document.querySelector('.search-bar-container')
     const searchBar = searchBarFactory()
     searchBarContainer.prepend(searchBar)
+}
+
+
+export function displayResultsCount(data) {
+    const count = data.length;
+    const noResults = 'No results found';
+    const container = document.getElementById('results-count');
+
+    if ( count > 0) {
+        container.innerHTML = count;
+    } else {
+        container.innerHTML = noResults;
+    }
+    fadeAndSlideIn(container.parentElement)
 }
