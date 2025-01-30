@@ -231,7 +231,11 @@ def delete_course(request, course_id):
             mails.append(mail)
         course.delete()
         send_mass_mail((mail for mail in mails), fail_silently=False)
-        messages.success(request, 'Course was deleted successfully')
+        messages.success(
+            request,
+            """Course successfully deleted. A message has
+            been sent to all participants"""
+        )
 
     return HttpResponseRedirect(reverse('index'))
 
