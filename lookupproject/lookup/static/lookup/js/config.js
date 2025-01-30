@@ -9,6 +9,7 @@ export const CONFIG = {
         locationBasedBrowser: '/geoschool',
         participantsView: '/participants',
         myCoursesView: '/mycourses',
+        registerView: '/accounts/register',
     },
     apiKey: '931a2f65384241b19147a6b601733f10',
 };

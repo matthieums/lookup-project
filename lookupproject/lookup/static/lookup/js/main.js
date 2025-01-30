@@ -2,10 +2,11 @@ import { initializeParams } from './filterAndSearchUtils.js';
 import { CONFIG } from './config.js';
 import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js';
+import { validatePasswords } from './validation.js'; 
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;
-    
+
     if (currentPath === CONFIG.paths.indexView) {
         const params = await initializeParams();
         fetchAndDisplayClosestCityName(params);
