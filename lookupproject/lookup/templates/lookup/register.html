@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-6">
         
-            <form action="POST">
+            <form action="{% url 'register' %}" method="POST">
         
             {% csrf_token %}
             {{form.as_p}}

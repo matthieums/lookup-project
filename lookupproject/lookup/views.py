@@ -124,7 +124,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Registration successful')
-            return redirect('login')
+            return redirect(reverse('login'))
     else:
         form = NewUserForm()
 

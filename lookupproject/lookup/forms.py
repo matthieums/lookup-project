@@ -12,10 +12,11 @@ class CustomLoginForm(AuthenticationForm):
 
 class NewUserForm(UserCreationForm):
     role = forms.ChoiceField(choices=[(STUDENT, 'Student'), (TEACHER, 'Teacher')])
-
+    email = forms.EmailField(required=True)
+    
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'role']
+        fields = ['username', 'email', 'role', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
