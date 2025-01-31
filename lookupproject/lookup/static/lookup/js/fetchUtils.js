@@ -47,11 +47,8 @@ function renderResults(data, path) {
     }
 }
 
-export async function fetchAndDisplayNearbySchools(params) {
+export async function fetchAndDisplayNewCoursesNearby(params) {
     const resultsContainer = document.querySelector('.results-container');
-    const featuredContainer = document.querySelector('.featured-container')
-    displayLoadingSpinner(true, featuredContainer);
-
     try {
         const response = await fetch('/geoschool', {
             method: 'POST',
