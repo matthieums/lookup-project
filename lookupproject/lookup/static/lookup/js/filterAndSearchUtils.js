@@ -2,6 +2,8 @@ import { fetchAndRender } from "./fetchUtils.js";
 import { hideUnnecessaryContainers } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
 import { displayLoadingSpinner, fadeAndSlideIn } from "./animations.js";
+import { searchBarFactory } from './elementFactories.js';
+
 
 /**
  * Initializes parameters for the filters.
@@ -64,26 +66,8 @@ export function setUpDynamicFilters(params, path) {
     })
 }
 
-/**
- * Creates a search bar html with filtering behaviour.
- * @returns {HTMLInputElement}
- */
-export function searchBarFactory() {
-    const searchBar = document.createElement('input');
-    searchBar.type = 'text'
-    searchBar.placeholder = 'Search here'
-    searchBar.classList.add('search-bar')
-    searchBar.classList.add('form-control')
 
-    searchBar.addEventListener('keyup', function(event) {
-        const searchQuery = event.target.value
-        narrowResults(searchQuery)
-    })
-    return searchBar;
-}
-
-
-function narrowResults(searchQuery) {
+export function narrowResults(searchQuery) {
     const allResults = document.querySelectorAll('.result')
     const normalizedQuery = searchQuery.toLowerCase()
     const resultsCountContainer = document.getElementById('results-count');
@@ -125,6 +109,10 @@ export function setDefaultRadius() {
 function appendSearchBar() {
     const searchBarContainer = document.querySelector('.search-bar-container')
     const searchBar = searchBarFactory()
+    searchBar.addEventListener('keyup', function(event) {
+        const searchQuery = event.target.value
+        narrowResults(searchQuery)
+    })
     searchBarContainer.prepend(searchBar)
 }
 

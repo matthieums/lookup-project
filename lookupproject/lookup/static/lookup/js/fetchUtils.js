@@ -1,7 +1,6 @@
 import { formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable } from './domUtils.js';
-import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
-import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
+import { displayLoadingSpinner } from './animations.js';
 import { displayResultsCount } from './filterAndSearchUtils.js';
 
 /**
