@@ -1,12 +1,8 @@
 import { formatResultsAsCards, formatResultsAsStrings, formatResultsAsTable } from './domUtils.js';
 import { getCookie } from './csrfUtils.js'
 import { CONFIG } from './config.js';
-import { displayLoadingSpinner, fadeAndSlideIn, fadeAndSlideOut } from './animations.js';
+import { displayLoadingSpinner, fadeAndSlideIn } from './animations.js';
 import { displayResultsCount } from './filterAndSearchUtils.js';
-    // TO-DO
-    // Refactor the fetchanddisplaynearbyschool function and merge it with the 
-    // fetchAndRender function
-    // Answer my own question: Why did I use Post instead of Get for some fetch requests?
 
 /**
  * Fetches data from the provided URL and renders the results.
@@ -45,43 +41,6 @@ function renderResults(data, path) {
     } else if (path === CONFIG.paths.schoolsView) {
         formatResultsAsStrings(data);
     }
-}
-
-export async function fetchAndDisplayNewCoursesNearby(params) {
-    const resultsContainer = document.querySelector('.results-container');
-    try {
-        const response = await fetch('/geoschool', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken') },
-            body: JSON.stringify({ 
-                user_lat: params.user_lat,
-                user_lon: params.user_lon,
-                radius: params.radius
-            })
-        })
-
-        if (!response.ok) {
-            throw new Error('NETWORK RESPONSE WAS NOT OK');
-        }
-        const data = await response.json();
-        if (data.error) {
-            resultsContainer.innerHTML = `${data.error}`;
-        } else {
-            resultsContainer.innerHTML = '';
-            let content = '';
-            data.forEach(school => {
-                content += `<div>${school.name}</div>`;
-            });
-            resultsContainer.innerHTML = content;
-            fadeAndSlideIn(resultsContainer);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        resultsContainer.innerHTML = 'AN ERROR HAS OCCURRED';
-    }
-    displayLoadingSpinner(false, featuredContainer)
 }
 
 

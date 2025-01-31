@@ -54,10 +54,8 @@ export function setUpDynamicFilters(params, path) {
             clearTimeout(timeout);
 
             timeout = setTimeout(() => {
-                const queryString = Object.entries(params)
-                    .filter(([key, value]) => value !== null && value !== "")
-                    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-                    .join('&');
+                const queryString = queryStringBuilder(params)
+
 
                 const fetchUrl = `courses/get?${queryString}`;
                 fetchAndRender(fetchUrl, path);
@@ -142,4 +140,11 @@ export function displayResultsCount(data) {
         container.innerHTML = noResults;
     }
     fadeAndSlideIn(container.parentElement)
+}
+
+export function queryStringBuilder(params) {
+    return Object.entries(params)
+    .filter(([key, value]) => value !== null && value !== "")
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
 }
