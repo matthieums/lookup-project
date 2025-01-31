@@ -1,7 +1,7 @@
 import { fetchAndRender } from "./fetchUtils.js";
 import { hideUnnecessaryContainers } from "./domUtils.js";
 import { initializeUserCoordinates } from "./geoUtils.js"
-import { displayLoadingSpinner, fadeAndSlideIn, fadeAndSlideOut } from "./animations.js";
+import { displayLoadingSpinner, fadeAndSlideIn } from "./animations.js";
 
 /**
  * Initializes parameters for the filters.

@@ -58,11 +58,11 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Do you want to enroll?</h1>
+                <h3 class="modal-title fs-5">Do you want to register for this class?</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <h2>A confirmation will be sent to {{user.email}}</h2>
+                <p>A confirmation will be sent to <strong>{{user.email}}</strong></p>
                 <form action="{% url 'course' course.id %}" method="POST">
                   {% csrf_token %}
                   <div class="modal-footer">
@@ -82,12 +82,12 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to cancel this course?</h1>
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to cancel this course?</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <h2>A mail will be sent to all who enrolled to this course</h2>
-                <p>We are sorry that you cannot provide the course anymore.</p>
+                <p>A mail will be sent to all who enrolled to this course</p>
+                <p>We are sorry that you cannot provide this course anymore.</p>
                 <form action="/delete/{{course.id}}" method="POST">
                   {% csrf_token %}
                   <div class="modal-footer">
