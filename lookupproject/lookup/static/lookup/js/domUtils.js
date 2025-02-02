@@ -88,3 +88,8 @@ export function formatResultsAsTable(data) {
         table.classList.remove('d-none')
     })
 }
+
+// TO-DO: Add a function to format results as carrousel
+// TO-DO: Add a function that fetches the appropriate data.
+// => Refactor some parts of the view to send the required with
+// appropriate filters: by most-recently added, and 1 per discipline for example?

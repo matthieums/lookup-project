@@ -38,3 +38,30 @@ function getUserCoordinates() {
         }
     });
 }
+
+export function createGeocoderAutocomplete(container) {
+    const autoCompleteInput = 
+    new autocomplete.GeocoderAutocomplete(
+        container, 
+        CONFIG.apiKey, 
+        {  filter: { country: "BE" }  });
+
+        setupGeocoderAutocomplete(autoCompleteInput)
+}
+
+function setupGeocoderAutocomplete(input) {
+    const locationInput = document.getElementById("id_location");
+    const latitudeInput = document.getElementById("id_latitude");
+    const longitudeInput = document.getElementById("id_longitude");
+
+    input.on('select', (location) => {
+        if (location.properties) {
+            const address = location.properties.formatted;
+            locationInput.value = address;
+            latitudeInput.value = latitude;
+            longitudeInput.value = longitude;          
+        }
+    });
+    document.querySelector('.geoapify-close-button').classList.add('d-none');
+    document.querySelector('.geoapify-autocomplete-input').classList.add('form-control');
+}

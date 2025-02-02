@@ -28,7 +28,6 @@ export async function fetchAndRender(url, path) {
     }
 }
 
-// Renders data and adds a search bar
 function renderResults(data, path) {
     if (path === CONFIG.paths.indexView) {
         displayResultsCount(data);
@@ -41,7 +40,6 @@ function renderResults(data, path) {
         formatResultsAsStrings(data);
     }
 }
-
 
 export async function fetchAndDisplayClosestCityName(params) {
     const closestCityContainer = document.getElementById('closest-city')
