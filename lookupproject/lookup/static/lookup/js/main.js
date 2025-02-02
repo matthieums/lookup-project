@@ -1,6 +1,5 @@
-import { initializeParams } from './filterAndSearchUtils.js';
+import { initializeParams, setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { CONFIG } from './config.js';
-import { setUpDynamicFilters } from './filterAndSearchUtils.js';
 import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js';
 import { createGeocoderAutocomplete } from './geoUtils.js';
 
@@ -23,6 +22,5 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } else if (currentPath.startsWith('/course/') && currentPath.endsWith('/participants')) {
         setupDownloadButton();
-
     }
 });
