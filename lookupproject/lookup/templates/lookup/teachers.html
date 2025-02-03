@@ -5,18 +5,28 @@ Teachers
 {% endblock %}
 
 {% block body %}
-    <h2>Verified teachers of our community</h2>
-    <h3>They deliver quality courses to you:</h3>
-    <div class="container results-container">
+<div class="container">
+    <div class="row">
+        
+            <h2>Verified teachers of our community</h2>
+            <h3>They deliver quality courses to you:</h3>
+        
     </div>
-    <div class="container teacher-container">
 
-        {% for teacher in teachers %}
-        <a href="{% url 'teacher_profile' teacher.id %}">
-            <p>{{teacher.last_name}} {{teacher.first_name}}</p>
-        </a>
-        {% endfor %}
-    </div>
+        <div class="container results-container">
+        </div>
+
+        <div class="row teacher-container">
+    
+            {% for teacher in teachers %}
+            <a href="{% url 'teacher_profile' teacher.id %}">
+                <p>{{teacher.last_name}} {{teacher.first_name}}</p>
+            </a>
+            {% endfor %}
+        </div>
+
+
+</div>
 
 
         
