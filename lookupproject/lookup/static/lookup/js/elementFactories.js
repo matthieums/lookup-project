@@ -5,8 +5,7 @@ export function courseCardFactory(id, header, title, text, footer, imageUrl) {
     card.classList.add('card', 'text-center', 'm-2', 'result', 'shadow-sm', 'card-clickable');
     card.id = id
 
-    const cardHeader = document.createElement('div');
-    cardHeader.classList.add('card-header');
+    const cardHeader = document.createElement('h5');
     cardHeader.textContent = header;
 
     const cardBody = document.createElement('div');
@@ -31,7 +30,7 @@ export function courseCardFactory(id, header, title, text, footer, imageUrl) {
 
     card.appendChild(img);
     card.appendChild(cardBody);
-    cardBody.append(cardTitle, cardText);
+    cardBody.append(cardHeader, cardTitle, cardText);
     card.appendChild(cardFooter);
 
     return card;
