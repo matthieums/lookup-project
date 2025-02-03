@@ -1,10 +1,6 @@
 from django.core.management.base import BaseCommand
 from ...tests.factories import SchoolFactory, CourseFactory, TeacherFactory, StudentFactory
 
-
-# Pour une raison qui me dépasse, les données dans la boucle ne sont pas recalculées.
-# Les factories ne sont pas réexécutées après la première exécution de la commande.
-# En conséquence, un seul nom est attribué à toutes les instances
 class Command(BaseCommand):
     help = 'Populate the database with sample data'
 
