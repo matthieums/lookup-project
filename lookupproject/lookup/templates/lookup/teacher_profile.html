@@ -6,4 +6,9 @@ Teacher
 
 {% block body %}
 <h1>{{teacher.first_name}}</h1>
+<h2>This teacher is providing these courses:</h2>
+{% for course in courses %}
+<p>{{course.schedule}}</p>    
+<p>{{course.name}}</p>
+{% endfor %}
 {% endblock %}

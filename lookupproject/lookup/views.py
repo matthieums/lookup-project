@@ -103,15 +103,19 @@ def schools(request):
 
 def teacher_profile(request, teacher_id):
     teacher = get_object_or_404(CustomUser, pk=teacher_id)
+    courses = Course.objects.filter(created_by=teacher_id)
     return render(request, "lookup/teacher_profile.html", {
-        'teacher': teacher
+        'teacher': teacher,
+        'courses': courses
     })
 
 
 def school_profile(request, school_id):
     school = get_object_or_404(School, pk=school_id)
+    courses = Course.objects.filter(place=school_id)
     return render(request, "lookup/school_profile.html", {
-        'school': school
+        'school': school,
+        'courses': courses
     })
 
 

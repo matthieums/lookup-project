@@ -6,4 +6,16 @@ School
 
 {% block body %}
 <h1>{{school.name}}</h1>
+<p>{{school.website}}</p>
+<div class="row">
+    <div class="col">
+        <h2>Upcoming courses in this school:</h2>
+        {% for course in courses %}
+            <p>{{course.schedule}}</p>
+            <p>{{course.name}}</p>
+            
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
