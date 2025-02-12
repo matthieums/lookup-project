@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } else if (currentPath === CONFIG.paths.myCoursesView) {
         const id = document.querySelector('.user-id').innerHTML;
-        const url = `courses/get?${encodeURIComponent('created_by')}=${encodeURIComponent(id)}`;
+        const url = `courses/get?${encodeURIComponent('id')}=${encodeURIComponent(id)}`;
         fetchAndRender(url, currentPath);
 
     } else if (currentPath.startsWith('/course/') && currentPath.endsWith('/participants')) {

@@ -277,7 +277,7 @@ def getCourse(request):
     serializer = CourseQueryParamsSerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
 
-    user_id = request.GET.get('created_by')
+    user_id = request.GET.get('id')
     discipline = request.GET.get('discipline')
     age_group = request.GET.get('age_group')
     radius = request.GET.get('radius')
@@ -290,7 +290,11 @@ def getCourse(request):
     courses = Course.objects.all()
 
     if user_id:
-        courses = courses.filter(created_by=user_id)
+        user = CustomUser.objects.get(id=user_id)
+        if user.is_student():
+            courses = courses.filter(students=user)
+        elif user.is_teacher():
+            courses = courses.filter(created_by=user_id)
     if discipline:
         courses = courses.filter(discipline=discipline)
     if age_group:
