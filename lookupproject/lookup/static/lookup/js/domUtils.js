@@ -7,8 +7,8 @@ export function hideUnnecessaryContainers(path) {
     
     if (path === CONFIG.paths.indexView) {
         const titlesContainer = document.querySelector('.titles-container');
-        const featuredContainer = document.querySelector('.featured-container');
-        containersToHide.push(titlesContainer, featuredContainer);
+        // const featuredContainer = document.querySelector('.featured-container');
+        containersToHide.push(titlesContainer);
     } else if (path === CONFIG.paths.teachersView) {
         const teacherContainer = document.querySelector('.teacher-container');
         containersToHide.push(teacherContainer);

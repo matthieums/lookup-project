@@ -15,7 +15,8 @@
 
       <div class="col-md-4 col-sm6">
         <div class="row">
-          <h2>{{ course.name}}</h2> <h4>w/ <a href="{% url 'teacher_profile' course.created_by.id %}">{{course.created_by}}</a></h4>
+          <h2>{{ course.name}}</h2> <h4>w/ {{course.created_by}}</h4>
+          <!-- <a href="{% url 'teacher_profile' course.created_by.id %}">{{course.created_by}}</a> -->
         </div>
         <div class="row">
           <small>Date: {{course.schedule}}</small>
