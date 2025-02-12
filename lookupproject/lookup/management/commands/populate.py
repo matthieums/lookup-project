@@ -1,27 +1,27 @@
+import random
 from django.core.management.base import BaseCommand
-from ...tests.factories import SchoolFactory, CourseFactory, TeacherFactory, StudentFactory
+from ...tests.factories import (SchoolFactory, TeacherFactory, StudentFactory,
+                                DanceCourses, MusicCourses, DramaCourses
+                                )
 
 class Command(BaseCommand):
     help = 'Populate the database with sample data'
 
     def handle(self, *args, **kwargs):
         NUMBER_OF_SAMPLES = 10
-        SAMPLED_DATA = ['school', 'teacher', 'course']
 
-        for _ in range(NUMBER_OF_SAMPLES + 1):
-            print(f'execution number {_}')
-            school = SchoolFactory()
-            teacher = TeacherFactory()
-            student = StudentFactory()
-            course = CourseFactory(place=school)
+        schools = SchoolFactory.create_batch(NUMBER_OF_SAMPLES)
+        teachers = TeacherFactory.create_batch(NUMBER_OF_SAMPLES)
+        students = StudentFactory.create_batch(NUMBER_OF_SAMPLES)
 
-            course.teachers.add(teacher)
+        dance_courses = [DanceCourses.create(place=schools[i], created_by=random.choice(teachers)) for i in range(NUMBER_OF_SAMPLES)]
+        drama_courses = [DramaCourses.create(place=schools[i], created_by=random.choice(teachers)) for i in range(NUMBER_OF_SAMPLES)]
+        music_courses = [MusicCourses.create(place=schools[i], created_by=random.choice(teachers)) for i in range(NUMBER_OF_SAMPLES)]
 
-            course.save()
-            teacher.save()
-            student.save()
-            school.save()
+        for course_list in [dance_courses, drama_courses, music_courses]:
+            for course in course_list:
+                course.teachers.add(course.created_by)
 
         self.stdout.write(self.style.SUCCESS(
-            f'Database populated with {NUMBER_OF_SAMPLES} of each {", ".join(SAMPLED_DATA)}'
-            ))
+            f"Database populated with {NUMBER_OF_SAMPLES} schools, teachers, students, and courses."
+        ))

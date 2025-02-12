@@ -15,19 +15,18 @@ STYLES = {
 
 fake = Faker()
 
+
 class Audiences(BaseProvider):
     def randomAudience(self):
         return random.choice(list(TARGET_AUDIENCE_CHOICES.values()))
 
 
-class Disciplines(BaseProvider):
-    def randomDiscipline(self):
-        return random.choice(list(DISCIPLINE_CHOICES.values()))
-
-
 class Styles(BaseProvider):
-    def randomStyle(self):
-        return random.choice(random.choice(list(STYLES.values())))
+    def randomStyle(self, category=None):
+        if category and category in STYLES:
+            return random.choice(STYLES[category])
+        all_disciplines = [disc for sublist in STYLES.values() for disc in sublist]
+        return random.choice(all_disciplines)
 
 
 class Coordinates(BaseProvider):
@@ -50,7 +49,6 @@ class Coordinates(BaseProvider):
 
 fake.add_provider(Styles)
 fake.add_provider(Audiences)
-fake.add_provider(Disciplines)
 fake.add_provider(Coordinates)
 
 
@@ -88,9 +86,23 @@ class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Course
 
-    name = factory.LazyAttribute(lambda _: fake.randomStyle())
     description = factory.Faker('text')
     schedule = timezone.make_aware(fake.date_time_this_year())
     target_audience = factory.LazyAttribute(lambda _: fake.randomAudience())  # LazyAttribute needed for dynamic audience selection
-    discipline = factory.LazyAttribute(lambda _: fake.randomDiscipline())
     online = False
+    capacity = fake.pyint(10, 30, 5)
+
+
+class DanceCourses(CourseFactory):
+    name = factory.LazyAttribute(lambda _: fake.randomStyle('dance'))
+    discipline = 'dance'
+
+
+class DramaCourses(CourseFactory):
+    name = factory.LazyAttribute(lambda _: fake.randomStyle('drama'))
+    discipline = 'drama'
+
+
+class MusicCourses(CourseFactory):   
+    name = factory.LazyAttribute(lambda _: fake.randomStyle('music'))
+    discipline = 'music'
