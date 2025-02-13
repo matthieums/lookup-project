@@ -12,7 +12,8 @@ MyCourses
             </div>
             {% if user.is_teacher %}
                 <div class="col-6 text-end p-3">
-                    <button><a href="{% url 'new_course' %}">+ Add Course</a></button>
+                    <button class="btn"><a href="{% url 'new_course' %}">+ Add Course</a></button>
+                    <button class="btn "><a href="{% url 'new_school' %}">+ Add School</a></button>
                 </div>
             {% endif %}
 
