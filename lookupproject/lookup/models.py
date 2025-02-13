@@ -79,7 +79,6 @@ class Course(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
         related_name='course_creator',
-        default='23'
         )
     place = models.ForeignKey(
         School,

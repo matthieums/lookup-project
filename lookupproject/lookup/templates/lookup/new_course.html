@@ -6,8 +6,19 @@ About
 
 {% block body %}
     <h2>Create new course</h2>
-    <form action="/new_school" method="POST">
+    <form action="{% url 'new_course' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">submit</button>
     </form>
+
+    {% if form.errors %}
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}

@@ -166,7 +166,8 @@ def my_courses(request):
 
 @login_required
 def new_course(request):
-    if request.user.role != TEACHER:
+    user = request.user
+    if user.role != TEACHER:
         return HttpResponseForbidden(
             "Creating a course is restricted to teachers."
             )
@@ -174,7 +175,7 @@ def new_course(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
-            form.instance.created_by = request.user
+            form.instance.created_by = user
             form.save()
             messages.success(request, "Course successfully added!")
             return redirect(reverse(("index")))
