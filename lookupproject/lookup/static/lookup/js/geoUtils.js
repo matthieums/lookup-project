@@ -1,4 +1,4 @@
-
+import { CONFIG } from './config.js';
 
 /**
  * Fetches the user's coordinates, or returns default coordinates if the location can't be fetched.
