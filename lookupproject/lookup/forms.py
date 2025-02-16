@@ -1,7 +1,7 @@
 from django import forms
 from .models import Course, School, CustomUser, TEACHER, STUDENT
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
+from django.contrib.gis.geos import Point
 
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -50,6 +50,7 @@ class CourseForm(forms.ModelForm):
 
 
 class SchoolForm(forms.ModelForm):
+
     class Meta:
         model = School
         fields = ['name', 'location', 'coordinates',

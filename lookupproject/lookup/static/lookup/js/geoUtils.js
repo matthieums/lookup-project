@@ -1,5 +1,6 @@
 import { CONFIG } from './config.js';
 
+
 /**
  * Fetches the user's coordinates, or returns default coordinates if the location can't be fetched.
  * @returns {Promise<Array<number>>} A promise that resolves to an array of [latitude, longitude].
@@ -51,15 +52,15 @@ export function createGeocoderAutocomplete(container) {
 
 function setupGeocoderAutocomplete(input) {
     const locationInput = document.getElementById("id_location");
-    const latitudeInput = document.getElementById("id_latitude");
-    const longitudeInput = document.getElementById("id_longitude");
+    const coordinatesInput = document.getElementById("id_coordinates");
 
     input.on('select', (location) => {
         if (location.properties) {
             const address = location.properties.formatted;
+            const latitude = location.properties.lat;
+            const longitude = location.properties.lon; 
             locationInput.value = address;
-            latitudeInput.value = latitude;
-            longitudeInput.value = longitude;          
+            coordinatesInput.value = `${longitude},${latitude}`;
         }
     });
     document.querySelector('.geoapify-close-button').classList.add('d-none');

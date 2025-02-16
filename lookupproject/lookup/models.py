@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.gis.db import models as gis_models
-
+from django.contrib.gis.geos import Point
 from lookup.validators import validate_location
 
 
@@ -59,7 +59,7 @@ class CustomUser(AbstractUser):
 class School(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, validators=[validate_location])
-    coordinates = gis_models.PointField(blank=True, null=True, srid=4326)
+    coordinates = gis_models.PointField(blank=False, srid=4326)
     contact = models.EmailField(max_length=254, unique=True)
     website = models.URLField(max_length=200, blank=True)
 

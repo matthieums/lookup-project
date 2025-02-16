@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
-from django.contrib.gis.db.models.functions import Distance
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.core.mail import send_mass_mail
@@ -191,11 +190,20 @@ def new_course(request):
 def new_school(request):
 
     if request.method == 'POST':
-        form = SchoolForm(request.POST)
+
+        # Customized conversion to point because nothing else
+        # seemed to work
+        form_data = request.POST.copy()
+        raw_value = form_data.get('coordinates') 
+        lon, lat = map(float, raw_value.split(','))
+        point = Point(lon, lat)
+        form_data['coordinates'] = point
+        form = SchoolForm(form_data)
+
         if form.is_valid():
             form.save()
             messages.success(request, "School successfully added")
-            return redirect(reverse(('success')))
+            return redirect(reverse(('my_courses')))
     else:
         form = SchoolForm()
 

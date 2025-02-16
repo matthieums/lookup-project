@@ -10,7 +10,7 @@ New school
 <div class="row">
 <div class="col-lg-8 col-md-12">
     
-        <form action="/new_school" method="post">
+        <form action="{% url 'new_school' %}" method="post">
             {% csrf_token %}
 
             <div>
@@ -33,9 +33,10 @@ New school
                 {{form.website}}
             </div>
     
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
+            <div>
+                {{ form.location }}
+            </div>
+            <div>{{ form.coordinates }}</div>
     
             <input id="submit-button" type="submit" value="OK">
 
