@@ -35,11 +35,13 @@ def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
     course_creator = course.created_by
-
+    students_list = list(course.students.all())
+    print(students_list)
     if request.method == 'GET':
         return render(request, 'lookup/course.html', {
             'course': course,
-            'user': user
+            'user': user,
+            'students_list': students_list
         })
 
     elif request.method == 'POST':

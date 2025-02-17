@@ -38,15 +38,21 @@
 
 
       {% if user.is_authenticated %}
-      
-        <div class="row">
-          <div class="col-auto">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
-              Enroll
-            </button>
-          </div>
 
-        {% if user.is_teacher %}
+          <div class="row">
+            <div class="col-auto">
+              {% if user in students_list %}
+                <button disabled type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
+                  Already enrolled
+                </button>
+              {% else %}
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
+                Enroll
+              </button>
+              {% endif %}
+            </div>
+
+        {% if user.is_teacher and user == course.created_by %}
           <div class="col-auto">
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
               Cancel Course
