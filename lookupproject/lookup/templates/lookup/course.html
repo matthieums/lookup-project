@@ -47,9 +47,9 @@
                 </button>
               {% else %}
                 {% if user.is_student %}
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
-                  Enroll
-                </button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enrollModal">
+                    Enroll
+                  </button>
               {% endif %}
 
               {% endif %}
@@ -60,6 +60,11 @@
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
               Cancel Course
             </button>
+          </div>
+          <div class="col-auto">
+            <a href="{% url 'participants' course.id %}" class="btn btn-primary" role="button">
+              See participants
+            </a>
           </div>
         {% endif %}
         </div>
