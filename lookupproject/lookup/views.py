@@ -73,7 +73,7 @@ def course(request, course_id):
             messages.success(
                 request,
                 f"You\'ve successfully registered to this course. A confirmation"
-                f"has been sent to {user.email}"
+                f" has been sent to {user.email}"
                 )
 
             return HttpResponseRedirect(reverse('index'))
