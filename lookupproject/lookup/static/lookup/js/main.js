@@ -2,6 +2,7 @@ import { initializeParams, setUpDynamicFilters } from './filterAndSearchUtils.js
 import { CONFIG } from './config.js';
 import { fetchAndRender, fetchAndDisplayClosestCityName } from './fetchUtils.js';
 import { createGeocoderAutocomplete } from './geoUtils.js';
+import { setupDownloadButton } from './downloadUtils.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const currentPath = window.location.pathname;

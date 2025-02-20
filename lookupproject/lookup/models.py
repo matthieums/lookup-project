@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.gis.db import models as gis_models
-from django.contrib.gis.geos import Point
 from lookup.validators import validate_location
 
 
@@ -104,7 +103,7 @@ class Course(models.Model):
         related_name='enrolled_courses',
         verbose_name='students enrolled in this course'
         )
-    capacity = models.PositiveIntegerField(default=1)
+    capacity = models.PositiveIntegerField(default=5)
 
     def __str__(self) -> str:
         return f'{self.name}, created by {self.created_by}'

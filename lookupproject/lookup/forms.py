@@ -36,7 +36,7 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = ['name', 'description', 'place',
                   'teachers', 'schedule', 'target_audience',
-                  'discipline', 'online', 'illustration']
+                  'discipline', 'capacity', 'online', 'illustration']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
