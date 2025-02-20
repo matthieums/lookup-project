@@ -77,7 +77,7 @@ export function narrowResults(searchQuery) {
         let resultData;
 
         if (result.classList.contains('card')) {
-            resultData = result.firstElementChild.textContent
+            resultData = result.querySelector('.card-title').textContent;
         } else {           
             resultData = result.textContent
         }
