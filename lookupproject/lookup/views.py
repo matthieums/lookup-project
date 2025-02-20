@@ -36,7 +36,6 @@ def course(request, course_id):
     user = request.user
     course_creator = course.created_by
     students_list = list(course.students.all())
-    print(students_list)
     if request.method == 'GET':
         return render(request, 'lookup/course.html', {
             'course': course,
