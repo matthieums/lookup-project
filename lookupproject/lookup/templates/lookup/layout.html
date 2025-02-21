@@ -32,10 +32,10 @@
             
                             <form action="{% url 'logout' %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn">Logout</button>
+                                <button type="submit" class="btn text-light">Logout</button>
                             </form>
                         {% else %}
-                            <a href="{% url 'login' %}" class="btn">Login / register</a>
+                            <a href="{% url 'login' %}" class="btn text-light">Login / register</a>
                         {% endif %}
                     </div>
                     <!-- <button id="menu-toggler" class="d-flex navbar-toggler align-items-center justify-content-between border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
