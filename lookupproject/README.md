@@ -81,7 +81,10 @@ To automate dummy data generation, I created scripts that populate the database 
 - In both cases, an email notification is sent to the relevant people.
 
 ### 4. My Courses Page
-- Both students and teachers have access to a "My Courses" page, but it displays different information:
+- Both logged in students and teachers have access to a "My Courses" page, but it displays different information:
   - Students see a list of courses they are enrolled in.
   - Teachers see a list of courses they provide.
 - Both students and teachers can select a course to open its page and perform additional actions.
+
+### 5. Participants
+- Teachers can access the participant to their courses and download a printable list.
