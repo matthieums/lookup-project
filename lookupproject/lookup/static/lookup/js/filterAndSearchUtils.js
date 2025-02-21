@@ -83,14 +83,14 @@ export function narrowResults(searchQuery) {
         }
 
         if (!resultData.toLowerCase().startsWith(normalizedQuery)) {
-            result.classList.add('d-none');
+            result.parentElement.classList.add('d-none');
             if (count > 0) {
-                count -= 1;
+                count = Array.from(allResults).filter(result => !result.parentElement.classList.contains('d-none')).length;;
             }
             resultsCountContainer.innerHTML = count;
         } else {
-            result.classList.remove('d-none');
-            count += 1;
+            result.parentElement.classList.remove('d-none');
+            count = Array.from(allResults).filter(result => !result.parentElement.classList.contains('d-none')).length;;
             resultsCountContainer.innerHTML = count;
         }
     })
